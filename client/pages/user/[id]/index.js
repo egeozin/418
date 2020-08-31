@@ -25,11 +25,6 @@ const User = () => {
   const classes = useStyles();
 
   const { user, logout } = useUser();
-  const [selfUser, setSelfUser] = useState(true);
-  
-  const handleChange = (event) => {
-    console.log(event.target.value)
-  };
 
   const router = useRouter();
   const { id } = router.query;
@@ -41,7 +36,7 @@ const User = () => {
         { !data ? 
           <CircularProgress />
           :
-          <UserBody data={data} user={user} handleChange={handleChange}/>
+          <UserBody data={data} user={user}/>
         }
       </Container>
     </Layout>
