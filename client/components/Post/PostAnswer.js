@@ -138,7 +138,7 @@ const PostAnswer = (props) => {
             <IconButton
               onClick={(e) => {
                 if (!upvoted) {
-                  props.upvoteHandler(e, id, "a");
+                  props.upvoteHandler(e, id, props.userId, "a");
                   setUpvoted(true);
                 }
               }}

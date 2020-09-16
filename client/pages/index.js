@@ -21,8 +21,6 @@ const fetchSize = (url, token) =>
 
 const Index = props => {
   const { user, logout } = useUser();
-
-  
   const router = useRouter()
   const { pathname, query } = router
   const [ size, setSize ] = useState(0);

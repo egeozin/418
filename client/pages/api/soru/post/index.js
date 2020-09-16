@@ -24,7 +24,11 @@ export default (req, res) => {
                 answerCount: 0,
                 ownerUserId: qData.userId,
                 ownerName: qData.userName, 
-                voteCount: 0
+                voteCount: 0,
+                votes: [],
+                likes: [],
+                claps:[],
+                confuseds:[]
             })
             .then((doc) => {
                 const data = doc.data();

@@ -1,4 +1,4 @@
-import React from "react";
+import React,  { useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import Emoji from "react-emoji-render";
 import Badge from "@material-ui/core/Badge";
@@ -7,12 +7,20 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    margin: "15px 0px",
+    margin: "0px 0px",
   },
   iconButton: {
     transition: "all .3s ease-in-out",
     "&:hover": {
       backgroundColor: "#dddddd30",
+      transform: "scale(1.1)",
+    },
+  },
+  selfIconButton: {
+    transition: "all .3s ease-in-out",
+    backgroundColor: theme.palette.background.paper,
+    "&:hover": {
+      backgroundColor: theme.palette.background.border,
       transform: "scale(1.1)",
     },
   },
@@ -23,19 +31,33 @@ const useStyles = makeStyles((theme) => ({
 
 const EmojiBar = (props) => {
   const classes = useStyles();
-  const { likeCount, clapCount, confusedCount } = props.reaction;
+  const { likeCount, clapCount, confusedCount, likes, claps, confuseds } = props.reaction;
+  const [selected, setSelected] = useState({
+    like: likes.includes(props.userId), 
+    clap: claps.includes(props.userId),
+    confused: confuseds.includes(props.userId),
+  });
+
   return (
     <div className={classes.wrapper}>
       <IconButton
         edge="start"
-        className={classes.iconButton}
-        onClick={() =>
-          props.reactionUpvoteHandler(
+        className={selected.like ? classes.selfIconButton : classes.iconButton}
+        onClick={() => {
+          let newSelected = !selected.like
+          setSelected({
+            ...selected,
+            like: newSelected
+          });
+          return props.reactionUpvoteHandler(
             "likeCount",
             props.postType,
             props.index,
-            props.postId
-          )
+            props.postId,
+            props.userId,
+            newSelected
+          );
+          }
         }
       >
         <Badge badgeContent={likeCount} className={classes.badge}>
@@ -44,14 +66,21 @@ const EmojiBar = (props) => {
       </IconButton>
 
       <IconButton
-        className={classes.iconButton}
-        onClick={() =>
-          props.reactionUpvoteHandler(
+        className={selected.clap ? classes.selfIconButton : classes.iconButton}
+        onClick={() => {
+          let newSelected = !selected.clap
+          setSelected({
+            ...selected,
+            clap: newSelected
+          });
+          return props.reactionUpvoteHandler(
             "clapCount",
             props.postType,
             props.index,
-            props.postId
-          )
+            props.postId,
+            props.userId,
+            newSelected
+          )}
         }
       >
         <Badge badgeContent={clapCount} className={classes.badge}>
@@ -59,14 +88,21 @@ const EmojiBar = (props) => {
         </Badge>
       </IconButton>
       <IconButton
-        className={classes.iconButton}
-        onClick={() =>
-          props.reactionUpvoteHandler(
+        className={selected.confused ? classes.selfIconButton : classes.iconButton}
+        onClick={() => {
+          let newSelected = !selected.confused
+          setSelected({
+            ...selected,
+            confused: newSelected
+          });
+          return props.reactionUpvoteHandler(
             "confusedCount",
             props.postType,
             props.index,
-            props.postId
-          )
+            props.postId,
+            props.userId,
+            newSelected
+          )}
         }
       >
         <Badge badgeContent={confusedCount} className={classes.badge}>

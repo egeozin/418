@@ -107,6 +107,9 @@ const useStyles = makeStyles((theme) => ({
   voteButton: {
     color: theme.palette.text.secondary,
   },
+  selfVoteButton: {
+    color: theme.palette.primary.main,
+  },
   voteCount: {},
   voteMore: {
     fontSize: 40,
@@ -196,22 +199,22 @@ const PostQuestion = (props) => {
     formik.setErrors({});
   };
 
-  // async function handlePostResponse(values) {
-  //   // Data format for Question
-  //   // {q:doc.data(), a:answers, id: req.query.id}
-  //   if (userId) {
-  //     // ADD CLIENT VALIDATIONS HERE WITH YUP
-  //     const rData = {
-  //       body: values.bodyText,
-  //       postId: id,
-  //       userId: userId,
-  //       userName: userName,
-  //     };
-  //     // update the local data immediately
-  //     // NOTE: key is not required when using useSWR's mutate as it's pre-bound
-  //     onMutate(rData);
-  //   }
-  // }
+  async function handlePostResponse(values) {
+    // Data format for Question
+    // {q:doc.data(), a:answers, id: req.query.id}
+    if (userId) {
+      // ADD CLIENT VALIDATIONS HERE WITH YUP
+      const rData = {
+        body: values.bodyText,
+        postId: id,
+        userId: userId,
+        userName: userName,
+      };
+      // update the local data immediately
+      // NOTE: key is not required when using useSWR's mutate as it's pre-bound
+      onMutate(rData);
+    }
+  }
 
   const editorRef = useRef(null);
   const formik = useFormik({
@@ -243,12 +246,12 @@ const PostQuestion = (props) => {
           <IconButton
             onClick={(e) => {
               if (!upvoted) {
-                props.upvoteHandler(e, id, "q");
+                props.upvoteHandler(e, id, userId, "q");
                 setUpvoted(true);
               }
             }}
             edge="start"
-            className={classes.voteButton}
+            className={ data.q.votes.includes(userId) ? classes.selfVoteButton : classes.voteButton }
             aria-label="upvote"
           >
             <ExpandLessIcon className={classes.voteMore} />
@@ -346,6 +349,7 @@ const PostQuestion = (props) => {
             <Grid className={classes.emojiBar}>
               <EmojiBar
                 postId={id}
+                userId={userId}
                 postType={"q"}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}

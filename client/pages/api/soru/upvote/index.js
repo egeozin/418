@@ -23,7 +23,8 @@ export default (req, res) => {
                 .collection('posts')
                 .doc(postInfo.postId)
                 .update({
-                    voteCount: firebase.firestore.FieldValue.increment(1)
+                    voteCount: firebase.firestore.FieldValue.increment(1),
+                    votes: firebase.firestore.FieldValue.arrayUnion(postInfo.userId)
                 })
                 .then((doc) => {
                   res.json({status:"success", docExists:false, error:null})
