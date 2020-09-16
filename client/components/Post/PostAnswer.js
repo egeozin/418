@@ -232,6 +232,7 @@ const PostAnswer = (props) => {
               <EmojiBar
                 index={props.index}
                 postId={id}
+                userId={props.userId}
                 postType={"a"}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}
