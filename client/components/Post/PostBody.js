@@ -79,17 +79,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const updateReaction = (userid, postid, reactionType ) => {
+const selectReaction = (reactionType) => {
+  switch(reactionType) {
+      case 'likeCount':
+          return 'likes'
+      case 'clapCount':
+          return 'claps'
+      case 'confusedCount':
+          return 'confuseds'
+  }
+}
+const updateReaction = (userid, postid, reactionType, selected) => {
   return fetch("/api/soru/react", {
     method: "POST",
-    body: JSON.stringify({ userId: userid, postId: postid, reaction: reactionType }),
+    body: JSON.stringify({ userId: userid, postId: postid, reaction: reactionType, selected: selected }),
   }).then((res) => res.json());
 }
 
-const updateVote = (userid, postid) =>
+const updateVote = (userid, postid, selected) =>
   fetch("/api/soru/upvote", {
     method: "POST",
-    body: JSON.stringify({ userId: userid, postId: postid }),
+    body: JSON.stringify({ userId: userid, postId: postid, selected: selected }),
   }).then((res) => res.json());
 
 const PostBody = (props) => {
@@ -103,6 +113,9 @@ const PostBody = (props) => {
       likeCount: data.q.likeCount,
       clapCount: data.q.clapCount,
       confusedCount: data.q.confusedCount,
+      likes: data.q.likes,
+      claps: data.q.claps,
+      confuseds: data.q.confuseds
     },
     a: data.a.map((el) => {
         return {
@@ -110,12 +123,15 @@ const PostBody = (props) => {
           likeCount: el.likeCount,
           clapCount: el.clapCount,
           confusedCount: el.confusedCount,
+          likes: el.likes,
+          claps: el.claps,
+          confuseds: el.confuseds
         };
       }),
   }, []);
 
 
-  const reactionUpvoteHandler = (reactionType, postType, i, postId) => {
+  const reactionUpvoteHandler = (reactionType, postType, i, postId, userId, selected) => {
     if (userId) {
         if (postType === "a") {
           var newReaction = {
@@ -127,7 +143,11 @@ const PostBody = (props) => {
                     likeCount: el.likeCount, 
                     clapCount: el.clapCount, 
                     confusedCount: el.confusedCount,
-                    [reactionType]: el[reactionType] + 1,
+                    likes: el.likes,
+                    claps: el.claps,
+                    confuseds: el.confuseds,
+                    [selectReaction(reactionType)]: selected ? [...el[selectReaction(reactionType)], userId] : el[selectReaction(reactionType)].filter(e => e != userId ),
+                    [reactionType]: selected ? el[reactionType] + 1 : el[reactionType] - 1 ,
                   };
                 } else {
                   return el;
@@ -147,9 +167,10 @@ const PostBody = (props) => {
         } else {
           var newReaction = {
             ...reaction,
-            [postType]: {
-              ...reaction[postType],
-              [reactionType]: reaction[postType][reactionType] + 1,
+            q: {
+              ...reaction.q,
+              [reactionType]: selected ? reaction.q[reactionType] + 1 : reaction.q[reactionType] - 1  ,
+              [selectReaction(reactionType)]: selected ? [...reaction.q[selectReaction(reactionType)], userId] : reaction.q[selectReaction(reactionType)].filter(e => e != userId) ,
             },
           };
 
@@ -159,10 +180,10 @@ const PostBody = (props) => {
           };
         }
         mutate(async (data) => {
-            const { reactionExists, error } = await updateReaction(userId, postId, reactionType);
-            if (!reactionExists) {
-                setReaction(newReaction);
-                return newData;
+            const { status,  error } = await updateReaction(userId, postId, reactionType, selected);
+            if (status == "success") {
+              setReaction(newReaction);
+              return newData;
             }
         }, false);
     } else {
@@ -170,9 +191,9 @@ const PostBody = (props) => {
     }
   };
 
-  async function handleUpVote(event, postId, postType) {
+  async function handleUpVote(event, postId, userId, postType, selected) {
     event.preventDefault();
-    if (userId) {
+    if (userId) { 
       // update the local data immediately
       // NOTE: key is not required when using useSWR's mutate as it's pre-bound
       //console.log(newData)
@@ -181,7 +202,7 @@ const PostBody = (props) => {
             ...data,
             a: data.a.map(el => {
                 if (el.id === postId) {
-                    return { ...el, voteCount: el.voteCount + 1 }
+                    return { ...el, voteCount: selected ? el.voteCount + 1 : el.voteCount -1, votes: selected ? [...el.votes, userId] : el.votes.filter(e => e != userId)}
                 } else {
                     return el
                 }
@@ -190,12 +211,12 @@ const PostBody = (props) => {
       } else {
         var newData = {
             ...data,
-            q: { ...data.q, voteCount: data.q.voteCount + 1 },
+            q: { ...data.q, voteCount: selected ? data.q.voteCount + 1 : data.q.voteCount - 1 , votes: selected ? [...data.q.votes, userId] : data.q.votes.filter(e => e != userId ) },
           };
       }
       mutate(async (data) => {
-        const { docExists, error } = await updateVote(userId, postId);
-        if (!docExists) {
+        const { status, error } = await updateVote(userId, postId, selected);
+        if (status == "success") {
           return newData;
         }
       }, false);

@@ -15,15 +15,20 @@ export default (req, res) => {
                 tags: [],
                 language: [],
                 likeCount: 0,
-                clapCount: 0,
                 confusedCount: 0,
+                clapCount: 0,
                 responses:[],
                 postType: 2,
                 creationDate: firebase.firestore.FieldValue.serverTimestamp(),
+                updateDate: firebase.firestore.FieldValue.serverTimestamp(),
                 answerCount: 0,
                 ownerUserId: rData.userId,
                 ownerName: rData.userName, 
-                voteCount: 0
+                voteCount: 0,
+                votes: [],
+                likes: [],
+                claps:[],
+                confuseds:[]
             })
             .then((doc) => {
                 const parent = postsRef.doc(rData.postId)

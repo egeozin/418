@@ -107,6 +107,9 @@ const useStyles = makeStyles((theme) => ({
   voteButton: {
     color: theme.palette.text.secondary,
   },
+  selfVoteButton: {
+    color: theme.palette.primary.main,
+  },
   voteCount: {},
   voteMore: {
     fontSize: 40,
@@ -152,7 +155,6 @@ const useStyles = makeStyles((theme) => ({
 const PostQuestion = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const [upvoted, setUpvoted] = useState(false);
   const [defaultValue, setDefaultValue] = useState(
     JSON.stringify({
       blocks: [
@@ -171,6 +173,7 @@ const PostQuestion = (props) => {
   );
   const router = useRouter();
   const { data, id, userId, userName, mutate, onMutate } = props;
+  const [upvoted, setUpvoted] = useState(data.q.votes.includes(userId));
 
 
   const onEditorSubmit = (values, { resetForm }) => {
@@ -242,13 +245,12 @@ const PostQuestion = (props) => {
         <Grid item>
           <IconButton
             onClick={(e) => {
-              if (!upvoted) {
-                props.upvoteHandler(e, id, "q");
-                setUpvoted(true);
-              }
+              let newUpvoted = !upvoted
+              props.upvoteHandler(e, id, userId, "q", newUpvoted);
+              setUpvoted(newUpvoted);
             }}
             edge="start"
-            className={classes.voteButton}
+            className={ upvoted ? classes.selfVoteButton : classes.voteButton }
             aria-label="upvote"
           >
             <ExpandLessIcon className={classes.voteMore} />
@@ -346,6 +348,7 @@ const PostQuestion = (props) => {
             <Grid className={classes.emojiBar}>
               <EmojiBar
                 postId={id}
+                userId={userId}
                 postType={"q"}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}

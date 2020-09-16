@@ -21,37 +21,35 @@ export default (req, res) => {
       var userRef = db.collection('users').doc(reactionInfo.userId)
       userRef
         .get().then((doc) => {
-          if (doc.data()[selectReaction(reactionInfo.reaction)].includes(reactionInfo.postId)) {
-            res.json({status:"success", reactionExists:true, error:null})
-            resolve()
-          } else {
-            userRef
+
+          userRef
+            .update({
+              [selectReaction(reactionInfo.reaction)]: reactionInfo.selected ? firebase.firestore.FieldValue.arrayUnion(reactionInfo.postId) : firebase.firestore.FieldValue.arrayRemove(reactionInfo.postId) 
+            })
+            .then((doc) => {
+              db
+              .collection('posts')
+              .doc(reactionInfo.postId)
               .update({
-                [selectReaction(reactionInfo.reaction)]: firebase.firestore.FieldValue.arrayUnion(reactionInfo.postId)
-              })
+                  [reactionInfo.reaction]: reactionInfo.selected ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(-1),
+                  [selectReaction(reactionInfo.reaction)]: reactionInfo.selected ? firebase.firestore.FieldValue.arrayUnion(reactionInfo.userId) : firebase.firestore.FieldValue.arrayRemove(reactionInfo.userId) 
+              }) 
               .then((doc) => {
-                db
-                .collection('posts')
-                .doc(reactionInfo.postId)
-                .update({
-                    [reactionInfo.reaction]: firebase.firestore.FieldValue.increment(1)
-                }) 
-                .then((doc) => {
-                  res.json({status:"success", reactionExists:false, error:null})
-                  resolve()
-                })
-                .catch((error) => {
-                  res.json({ error });
-                  res.status(405).end();
-                  resolve();
-                });
+                res.json({status:"success", error:null})
+                resolve()
               })
               .catch((error) => {
                 res.json({ error });
                 res.status(405).end();
-                resolve()
-              })
-          }
+                resolve();
+              });
+            })
+            .catch((error) => {
+              res.json({ error });
+              res.status(405).end();
+              resolve()
+            })
+        
         }).catch((error) => {
           res.json({ error });
           res.status(405).end();

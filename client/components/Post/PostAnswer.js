@@ -84,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
   voteButton: {
     color: theme.palette.text.secondary,
   },
+  selfVoteButton: {
+    color: theme.palette.primary.main,
+  },
   deleteButton: {
     color: theme.palette.text.secondary,
   },
@@ -114,8 +117,9 @@ const useStyles = makeStyles((theme) => ({
 const PostAnswer = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const [upvoted, setUpvoted] = useState(false);
   const { id, data } = props;
+  const [upvoted, setUpvoted] = useState(data.votes.includes(props.userId));
+
   return (
     <>
       <Divider className={classes.divider} />
@@ -137,13 +141,12 @@ const PostAnswer = (props) => {
           <Grid item>
             <IconButton
               onClick={(e) => {
-                if (!upvoted) {
-                  props.upvoteHandler(e, id, "a");
-                  setUpvoted(true);
-                }
+                let newUpvoted = !upvoted
+                props.upvoteHandler(e, id, props.userId, "a", newUpvoted);
+                setUpvoted(newUpvoted);
               }}
               edge="start"
-              className={classes.voteButton}
+              className={upvoted ? classes.selfVoteButton : classes.voteButton}
               aria-label="menu"
             >
               <ExpandLessIcon className={classes.voteMore} />
@@ -229,6 +232,7 @@ const PostAnswer = (props) => {
               <EmojiBar
                 index={props.index}
                 postId={id}
+                userId={props.userId}
                 postType={"a"}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}
