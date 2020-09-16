@@ -10,38 +10,34 @@ export default (req, res) => {
       var userRef = db.collection('users').doc(postInfo.userId)
       userRef
         .get().then((doc) => {
-          if (doc.data().upvotes.includes(postInfo.postId)) {
-            res.json({status:"success", docExists:true, error:null})
-            resolve()
-          } else {
-            userRef
+          userRef
+            .update({
+              upvotes: postInfo.selected ? firebase.firestore.FieldValue.arrayUnion(postInfo.postId) : firebase.firestore.FieldValue.arrayRemove(postInfo.postId)
+            })
+            .then((doc) => {
+              db
+              .collection('posts')
+              .doc(postInfo.postId)
               .update({
-                upvotes: firebase.firestore.FieldValue.arrayUnion(postInfo.postId)
+                  voteCount: postInfo.selected ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(-1),
+                  votes: postInfo.selected ? firebase.firestore.FieldValue.arrayUnion(postInfo.userId) : firebase.firestore.FieldValue.arrayRemove(postInfo.userId)
               })
               .then((doc) => {
-                db
-                .collection('posts')
-                .doc(postInfo.postId)
-                .update({
-                    voteCount: firebase.firestore.FieldValue.increment(1),
-                    votes: firebase.firestore.FieldValue.arrayUnion(postInfo.userId)
-                })
-                .then((doc) => {
-                  res.json({status:"success", docExists:false, error:null})
-                  resolve()
-                })
-                .catch((error) => {
-                  res.json({ error });
-                  res.status(405).end();
-                  resolve();
-                });
+                res.json({status:"success",  error:null})
+                resolve()
               })
               .catch((error) => {
                 res.json({ error });
                 res.status(405).end();
-                resolve()
-              })
-          }
+                resolve();
+              });
+            })
+            .catch((error) => {
+              res.json({ error });
+              res.status(405).end();
+              resolve()
+            })
+          
         }).catch((error) => {
           res.json({ error });
           res.status(405).end();

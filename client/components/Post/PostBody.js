@@ -96,10 +96,10 @@ const updateReaction = (userid, postid, reactionType, selected) => {
   }).then((res) => res.json());
 }
 
-const updateVote = (userid, postid) =>
+const updateVote = (userid, postid, selected) =>
   fetch("/api/soru/upvote", {
     method: "POST",
-    body: JSON.stringify({ userId: userid, postId: postid }),
+    body: JSON.stringify({ userId: userid, postId: postid, selected: selected }),
   }).then((res) => res.json());
 
 const PostBody = (props) => {
@@ -146,7 +146,7 @@ const PostBody = (props) => {
                     likes: el.likes,
                     claps: el.claps,
                     confuseds: el.confuseds,
-                    [selectReaction(reactionType)]: [...el[selectReaction(reactionType)], userId],
+                    [selectReaction(reactionType)]: selected ? [...el[selectReaction(reactionType)], userId] : el[selectReaction(reactionType)].filter(e => e != userId ),
                     [reactionType]: selected ? el[reactionType] + 1 : el[reactionType] - 1 ,
                   };
                 } else {
@@ -170,7 +170,7 @@ const PostBody = (props) => {
             q: {
               ...reaction.q,
               [reactionType]: selected ? reaction.q[reactionType] + 1 : reaction.q[reactionType] - 1  ,
-              [selectReaction(reactionType)]: [...reaction.q[selectReaction(reactionType)], userId],
+              [selectReaction(reactionType)]: selected ? [...reaction.q[selectReaction(reactionType)], userId] : reaction.q[selectReaction(reactionType)].filter(e => e != userId) ,
             },
           };
 
@@ -191,7 +191,7 @@ const PostBody = (props) => {
     }
   };
 
-  async function handleUpVote(event, postId, userId, postType) {
+  async function handleUpVote(event, postId, userId, postType, selected) {
     event.preventDefault();
     if (userId) { 
       // update the local data immediately
@@ -202,7 +202,7 @@ const PostBody = (props) => {
             ...data,
             a: data.a.map(el => {
                 if (el.id === postId) {
-                    return { ...el, voteCount: el.voteCount + 1, votes: [...el.votes, userId]}
+                    return { ...el, voteCount: selected ? el.voteCount + 1 : el.voteCount -1, votes: selected ? [...el.votes, userId] : el.votes.filter(e => e != userId)}
                 } else {
                     return el
                 }
@@ -211,12 +211,12 @@ const PostBody = (props) => {
       } else {
         var newData = {
             ...data,
-            q: { ...data.q, voteCount: data.q.voteCount + 1, votes: [...data.q.votes, userId]},
+            q: { ...data.q, voteCount: selected ? data.q.voteCount + 1 : data.q.voteCount - 1 , votes: selected ? [...data.q.votes, userId] : data.q.votes.filter(e => e != userId ) },
           };
       }
       mutate(async (data) => {
-        const { docExists, error } = await updateVote(userId, postId);
-        if (!docExists) {
+        const { status, error } = await updateVote(userId, postId, selected);
+        if (status == "success") {
           return newData;
         }
       }, false);
