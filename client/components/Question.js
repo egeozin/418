@@ -58,6 +58,9 @@ const useStyles = makeStyles(theme => ({
     voteButton: {
         color: theme.palette.text.secondary,
     },
+    selfVoteButton: {
+        color: theme.palette.primary.main,
+    },
     voteCount:{
     },
     voteMore: {
@@ -76,16 +79,24 @@ const useStyles = makeStyles(theme => ({
 const Question = props => {
     const classes = useStyles();
     const [userid, setUserid] = useState(null);
-    const [upvoted, setUpvoted] = useState(false);
-    const { q, auth } = props
-
+    
+    const { q, userId, auth } = props
+    const [upvoted, setUpvoted] = useState(userId ? q.data.votes.includes(userId) : false);
     return (
         <Grid container direction="row" spacing={1} className={classes.questionContainer}>
             <Divider className={classes.divider}/>
-                 
             <Grid container item direction="column" alignItems="center" justify="center" xs={1} className={classes.buttons}>
                 <Grid item xs>
-                    <IconButton onClick={(e) => { if (!upvoted) { props.handleUpVote(e, props.index, q.id); setUpvoted(true)} }} edge="start" className={classes.voteButton} size="small" aria-label="upvote">
+                    <IconButton 
+                        onClick={(e) => {
+                            let newUpvoted = !upvoted
+                            props.handleUpVote(e, props.index, q.id, newUpvoted);
+                            setUpvoted(newUpvoted);
+                        }}
+                        edge="start" 
+                        className={upvoted ? classes.selfVoteButton : classes.voteButton} 
+                        size="small" 
+                        aria-label="upvote">
                         <ExpandLessIcon className={classes.voteMore} />
                     </IconButton>
                 </Grid>

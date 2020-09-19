@@ -57,11 +57,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const updateVote = (userid, postid) => 
-  fetch('/api/soru/upvote', {
-    method: 'POST',
-    body: JSON.stringify({ userId: userid, postId: postid })
+
+const updateVote = (userid, postid, selected) =>
+  fetch("/api/soru/upvote", {
+    method: "POST",
+    body: JSON.stringify({ userId: userid, postId: postid, selected: selected }),
   }).then((res) => res.json());
+
 
 
 const Main = (props) => {
@@ -70,18 +72,22 @@ const Main = (props) => {
   const [ loading, setLoading ] = useState(false);
   const { data, mutateFunc, auth, userId, size, count } = props
 
-  async function handleUpVote(event, idx, postId) {
-    event.preventDefault()
-    if (userId) {
-      const newData = {id: data[idx].id, data:{...data[idx].data, voteCount: data[idx].data.voteCount + 1}}
-      // update the local data immediately
-      // NOTE: key is not required when using useSWR's mutate as it's pre-bound
-      mutateFunc(async data => { 
-        const { docExists, error } = await updateVote(userId, postId)
-        if (!docExists) {
+  async function handleUpVote(event, idx, postId, selected) {
+    event.preventDefault();
+    if (userId) { 
+      var newData = {
+          id: data[idx].id,
+          data: {
+            ...data[idx].data,
+            voteCount: selected ? data[idx].data.voteCount + 1 : data[idx].data.voteCount - 1, 
+            votes: selected ? [...data[idx].data.votes, userId] : data[idx].data.votes.filter(e => e != userId ) },
+      };
+      mutateFunc(async (data) => {
+        const { status, error } = await updateVote(userId, postId, selected);
+        if (status == "success") {
           return data.map((d, i) => {return (i == idx) ? newData : d})
         }
-      }, false)
+      }, false);
     } else {
       router.push('/auth/standard')
     }
@@ -116,7 +122,7 @@ const Main = (props) => {
               data.map((q, i) => {
                 return (
                   <Grid key={i} item>
-                    <Question q={q} auth={auth} index={i} handleUpVote={handleUpVote} />
+                    <Question q={q} userId={userId} auth={auth} index={i} handleUpVote={handleUpVote} />
                   </Grid>
                 );
               })
