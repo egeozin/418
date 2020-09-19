@@ -13,16 +13,15 @@ import CodeBlock from "../Editor/EditorArea/CustomBlocks/CodeBlock";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import Blockquote from "../Editor/EditorArea/CustomBlocks/Blockquote";
 import { MuiThemeProvider } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+
 import theme from "../../src/theme";
 import languages from "../../src/languages";
-
 import GenericEditor from "../Editor/EditorArea/GenericEditor";
 import { useFormik } from "formik";
 import { responseEditorValidationSchema } from "../../utils/form";
-
+import { addZero } from "../../utils/utilFunctions";
 import EmojiBar from "./Emoji/EmojiBar";
-
-import { makeStyles } from "@material-ui/core/styles";
 
 const updateTheme = {
   ...theme,
@@ -175,6 +174,9 @@ const PostQuestion = (props) => {
   const { data, id, userId, userName, mutate, onMutate } = props;
   const [upvoted, setUpvoted] = useState(data.q.votes.includes(userId));
 
+  const date = new Date(data.a[0].creationDate.seconds * 1000);
+  const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+  const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
 
   const onEditorSubmit = (values, { resetForm }) => {
     const handled = handlePostResponse(values);
@@ -245,12 +247,12 @@ const PostQuestion = (props) => {
         <Grid item>
           <IconButton
             onClick={(e) => {
-              let newUpvoted = !upvoted
+              let newUpvoted = !upvoted;
               props.upvoteHandler(e, id, userId, "q", newUpvoted);
               setUpvoted(newUpvoted);
             }}
             edge="start"
-            className={ upvoted ? classes.selfVoteButton : classes.voteButton }
+            className={upvoted ? classes.selfVoteButton : classes.voteButton}
             aria-label="upvote"
           >
             <ExpandLessIcon className={classes.voteMore} />
@@ -300,7 +302,10 @@ const PostQuestion = (props) => {
           <Grid item className={classes.nameLanguage}>
             <Grid container direction="row" alignItems="center" spacing={2}>
               <Grid item>
-                <BetterLink href="/user/[id]/" as={`/user/${data.q.ownerUserId}`}>
+                <BetterLink
+                  href="/user/[id]/"
+                  as={`/user/${data.q.ownerUserId}`}
+                >
                   <Typography className={classes.questionPoster}>
                     @{data.q.ownerName}
                   </Typography>
@@ -374,6 +379,11 @@ const PostQuestion = (props) => {
           <Grid item>
             <Typography className={classes.questionResponders}>
               {data.q.answerCount} Cevap
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography>
+              {formattedDate} {hours}
             </Typography>
           </Grid>
         </Grid>
