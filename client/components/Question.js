@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
   voteButton: {
     color: theme.palette.text.secondary,
   },
+  selfVoteButton: {
+    color: theme.palette.primary.main,
+  },
   voteCount: {},
   voteMore: {
     fontSize: 40,
