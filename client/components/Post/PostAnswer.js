@@ -12,13 +12,14 @@ import CodeIcon from "@material-ui/icons/Code";
 import CodeBlock from "../Editor/EditorArea/CustomBlocks/CodeBlock";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import Blockquote from "../Editor/EditorArea/CustomBlocks/Blockquote";
-import DeleteIcon from '@material-ui/icons/Delete';
-import DeletePopover from './DeletePopover'
+import DeleteIcon from "@material-ui/icons/Delete";
+import DeletePopover from "./DeletePopover";
 
 import { makeStyles } from "@material-ui/core/styles";
 import theme from "../../src/theme";
 import palette from "../../src/palette";
 import EmojiBar from "./Emoji/EmojiBar";
+import { addZero } from "../../utils/utilFunctions";
 
 const updateTheme = {
   ...theme,
@@ -68,9 +69,13 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 120,
     //maxWidth:300
   },
-  answerPoster: {},
+  answerPoster: {
+    marginRight: 20,
+  },
   answerPosterContainer: {
     marginTop: 20,
+    display: "flex",
+    paddingBottom: 10,
   },
   answerText: {
     marginTop: 5,
@@ -119,6 +124,18 @@ const PostAnswer = (props) => {
   const [loading, setLoading] = useState(false);
   const { id, data } = props;
   const [upvoted, setUpvoted] = useState(data.votes.includes(props.userId));
+  let renderDate = null;
+
+  if (data.creationDate) {
+    const date = new Date(data.creationDate.seconds * 1000);
+    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+    renderDate = (
+      <Typography>
+        {formattedDate} {hours}
+      </Typography>
+    );
+  }
 
   return (
     <>
@@ -141,7 +158,7 @@ const PostAnswer = (props) => {
           <Grid item>
             <IconButton
               onClick={(e) => {
-                let newUpvoted = !upvoted
+                let newUpvoted = !upvoted;
                 props.upvoteHandler(e, id, props.userId, "a", newUpvoted);
                 setUpvoted(newUpvoted);
               }}
@@ -165,59 +182,64 @@ const PostAnswer = (props) => {
             justify={"space-between"}
             className={classes.answerContainer}
           >
-          <Grid 
-            container 
-            direction="row" 
-            justify={"space-between"} 
-            className={classes.answerContainer}>
-                <Grid item>
+            <Grid
+              container
+              direction="row"
+              justify={"space-between"}
+              className={classes.answerContainer}
+            >
+              <Grid item>
                 {data.body.blocks ? (
-                    <MuiThemeProvider theme={updateTheme}>
+                  <MuiThemeProvider theme={updateTheme}>
                     <MUIRichTextEditor
-                        readOnly={true}
-                        toolbar={false}
-                        customControls={[
+                      readOnly={true}
+                      toolbar={false}
+                      customControls={[
                         {
-                            name: "codeBlock",
-                            icon: <CodeIcon />,
-                            type: "block",
-                            blockWrapper: <CodeBlock />,
+                          name: "codeBlock",
+                          icon: <CodeIcon />,
+                          type: "block",
+                          blockWrapper: <CodeBlock />,
                         },
                         {
-                            name: "Blockquote",
-                            icon: <FormatQuoteIcon />,
-                            type: "block",
-                            blockWrapper: <Blockquote />,
+                          name: "Blockquote",
+                          icon: <FormatQuoteIcon />,
+                          type: "block",
+                          blockWrapper: <Blockquote />,
                         },
-                        ]}
-                        defaultValue={JSON.stringify(data.body)}
+                      ]}
+                      defaultValue={JSON.stringify(data.body)}
                     />
-                    </MuiThemeProvider>
+                  </MuiThemeProvider>
                 ) : (
-                    <Typography
+                  <Typography
                     variant="body1"
                     component="body"
                     className={classes.questionText}
-                    >
+                  >
                     {data.body.charAt(0).toUpperCase() + data.body.slice(1)}
-                    </Typography>
+                  </Typography>
                 )}
+              </Grid>
+              {props.userId == data.ownerUserId ? (
+                <Grid item>
+                  <IconButton
+                    //edge="start"
+                    className={classes.deleteButton}
+                    aria-label="delete"
+                  >
+                    <DeletePopover
+                      data={data}
+                      parentId={props.parentId}
+                      userId={props.userId}
+                      postId={id}
+                      handleDelete={props.handleDelete}
+                    />
+                  </IconButton>
                 </Grid>
-                {props.userId == data.ownerUserId ?
-                <Grid item >
-                    <IconButton 
-                        //edge="start" 
-                        className={classes.deleteButton} 
-                        aria-label="delete">
-                        <DeletePopover 
-                            data={data} 
-                            parentId={props.parentId}
-                            userId={props.userId} 
-                            postId={id} 
-                            handleDelete={props.handleDelete}
-                        />
-                    </IconButton>
-                </Grid>: <div />}
+              ) : (
+                <div />
+              )}
             </Grid>
             <Grid item>
               <Grid item className={classes.answerPosterContainer}>
@@ -226,6 +248,7 @@ const PostAnswer = (props) => {
                     @{data.ownerName}
                   </Typography>
                 </Link>
+                {renderDate}
               </Grid>
             </Grid>
             <Grid>
