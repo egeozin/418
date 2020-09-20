@@ -45,6 +45,7 @@ const PostAnswers = (props) => {
                   reaction={{id: e.id, likeCount: e.likeCount, confusedCount: e.confusedCount, clapCount: e.clapCount, likes: e.likes, claps: e.claps, confuseds: e.confuseds }}
                   upvoteHandler={props.upvoteHandler}
                   reactionUpvoteHandler={props.reactionUpvoteHandler}
+                  handleDelete={props.handleDelete}
                   index={i}
                 />
               </Grid>

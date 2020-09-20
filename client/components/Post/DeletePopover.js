@@ -71,7 +71,7 @@ const DeletePopover = props => {
   };
 
   const handleDeleteConfirm = ()=>{
-    handleDelete(userId,postId,parentId)
+    handleDelete(userId, postId, parentId)
     setAnchorEl(null);
   };
 

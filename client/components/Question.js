@@ -71,13 +71,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Question = (props) => {
+
+const Question = props => {
   const classes = useStyles();
   const [userid, setUserid] = useState(null);
-  const [upvoted, setUpvoted] = useState(false);
-  const { q, auth } = props;
+  
+  const { q, userId, auth } = props
+  const included = userId ? q.data.votes.includes(userId) : false
+  const [upvoted, setUpvoted] = useState(included);
   let renderDate = null;
-
+  
+  useEffect(() => { 
+      setUpvoted(included)
+    }, [included])
+  
   if (q.data.creationDate) {
     const date = new Date(q.data.creationDate.seconds * 1000);
     const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
@@ -109,14 +116,13 @@ const Question = (props) => {
         <Grid item xs>
           <IconButton
             onClick={(e) => {
-              if (!upvoted) {
-                props.handleUpVote(e, props.index, q.id);
-                setUpvoted(true);
-              }
+                let newUpvoted = !upvoted
+                props.handleUpVote(e, props.index, q.id, newUpvoted);
+                setUpvoted(newUpvoted);
             }}
-            edge="start"
-            className={classes.voteButton}
-            size="small"
+            edge="start" 
+            className={upvoted ? classes.selfVoteButton : classes.voteButton} 
+            size="small" 
             aria-label="upvote"
           >
             <ExpandLessIcon className={classes.voteMore} />
@@ -170,7 +176,6 @@ const Question = (props) => {
                   </Link>
                 ))}
               </Grid>
-
               <Grid item>
                 <Typography className={classes.questionResponders}>
                   {q.data.answerCount} cevap
@@ -185,36 +190,11 @@ const Question = (props) => {
   );
 };
 
-{
-  /* 
-<Grid item>
-    <Typography className={classes.question}>
-        {q.question.charAt(0).toUpperCase() + q.question.slice(1)}
-    </Typography>
-</Grid>
-*/
-}
 
 /*
 '--background-start': '#FE6B8B',
 '--background-end': '#FF8E53',
 '--box-shadow': 'rgba(255, 105, 135, .3)',
 */
-
-/*
-{
-    !auth ?
-    <>
-    <Typography className={classes.voteCount} align="center">{q.voteCount}</Typography>
-    <IconButton edge="start" className={classes.voteButton} size="small" aria-label="downvote">
-        <ExpandMoreIcon className={classes.voteLess}  />
-    </IconButton>
-    </>
-    :
-    <Typography className={classes.voteCount}>{q.voteCount}</Typography>
-}
-*/
-
-//Main.getInitialProps = context => ({ response: context.query.response, token: context.query.token});
 
 export default Question;
