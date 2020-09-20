@@ -81,7 +81,15 @@ const Question = props => {
     const [userid, setUserid] = useState(null);
     
     const { q, userId, auth } = props
-    const [upvoted, setUpvoted] = useState(userId ? q.data.votes.includes(userId) : false);
+    //console.log(q.data.votes.includes(userId))
+    const included = userId ? q.data.votes.includes(userId) : false
+
+    const [upvoted, setUpvoted] = useState(included);
+
+    useEffect(() => { 
+        setUpvoted(included)
+      }, [included])
+
     return (
         <Grid container direction="row" spacing={1} className={classes.questionContainer}>
             <Divider className={classes.divider}/>
