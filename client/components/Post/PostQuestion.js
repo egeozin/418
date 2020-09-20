@@ -173,10 +173,20 @@ const PostQuestion = (props) => {
   const router = useRouter();
   const { data, id, userId, userName, mutate, onMutate } = props;
   const [upvoted, setUpvoted] = useState(data.q.votes.includes(userId));
+  let renderDate = null;
 
-  const date = new Date(data.a[0].creationDate.seconds * 1000);
-  const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
-  const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+  if (data.q.creationDate) {
+    const date = new Date(data.q.creationDate.seconds * 1000);
+    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+    renderDate = (
+      <Grid item>
+        <Typography>
+          {formattedDate} {hours}
+        </Typography>
+      </Grid>
+    );
+  }
 
   const onEditorSubmit = (values, { resetForm }) => {
     const handled = handlePostResponse(values);
@@ -381,11 +391,7 @@ const PostQuestion = (props) => {
               {data.q.answerCount} Cevap
             </Typography>
           </Grid>
-          <Grid item>
-            <Typography>
-              {formattedDate} {hours}
-            </Typography>
-          </Grid>
+          {renderDate}
         </Grid>
       </Grid>
     </Grid>

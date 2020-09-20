@@ -69,9 +69,13 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 120,
     //maxWidth:300
   },
-  answerPoster: {},
+  answerPoster: {
+    marginRight: 20,
+  },
   answerPosterContainer: {
     marginTop: 20,
+    display: "flex",
+    paddingBottom: 10,
   },
   answerText: {
     marginTop: 5,
@@ -119,12 +123,19 @@ const PostAnswer = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const { id, data } = props;
-  console.log("PostAnswer -> data", data);
   const [upvoted, setUpvoted] = useState(data.votes.includes(props.userId));
+  let renderDate = null;
 
-  const date = new Date(data.creationDate.seconds * 1000);
-  const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
-  const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+  if (data.creationDate) {
+    const date = new Date(data.creationDate.seconds * 1000);
+    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+    renderDate = (
+      <Typography>
+        {formattedDate} {hours}
+      </Typography>
+    );
+  }
 
   return (
     <>
@@ -231,17 +242,13 @@ const PostAnswer = (props) => {
               )}
             </Grid>
             <Grid item>
-              <Grid item>
-                <Typography>
-                  {formattedDate} {hours}
-                </Typography>
-              </Grid>
               <Grid item className={classes.answerPosterContainer}>
                 <Link href="/user/[id]/" as={`/user/${data.ownerUserId}`}>
                   <Typography className={classes.answerPoster}>
                     @{data.ownerName}
                   </Typography>
                 </Link>
+                {renderDate}
               </Grid>
             </Grid>
             <Grid>

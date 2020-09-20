@@ -76,9 +76,17 @@ const Question = (props) => {
   const [userid, setUserid] = useState(null);
   const [upvoted, setUpvoted] = useState(false);
   const { q, auth } = props;
+  let renderDate = null;
 
-  const date = new Date(q.data.creationDate.seconds * 1000);
-  const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+  if (q.data.creationDate) {
+    const date = new Date(q.data.creationDate.seconds * 1000);
+    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    renderDate = (
+      <Grid item>
+        <Typography>{formattedDate}</Typography>
+      </Grid>
+    );
+  }
 
   return (
     <Grid
@@ -168,9 +176,7 @@ const Question = (props) => {
                   {q.data.answerCount} cevap
                 </Typography>
               </Grid>
-              <Grid item>
-                <Typography>{formattedDate}</Typography>
-              </Grid>
+              {renderDate}
             </Grid>
           </Grid>
         </Grid>
