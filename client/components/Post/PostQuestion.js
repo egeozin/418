@@ -173,8 +173,12 @@ const PostQuestion = (props) => {
   );
   const router = useRouter();
   const { data, id, userId, userName, mutate, onMutate } = props;
-  const [upvoted, setUpvoted] = useState(data.q.votes.includes(userId));
+  const included = userId ? data.q.votes.includes(userId) : false
+  const [upvoted, setUpvoted] = useState(included);
 
+  useEffect(() => { 
+    setUpvoted(included)
+  }, [included])
 
   const onEditorSubmit = (values, { resetForm }) => {
     const handled = handlePostResponse(values);
