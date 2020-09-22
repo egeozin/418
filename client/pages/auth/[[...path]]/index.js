@@ -34,7 +34,6 @@ const Auth = () => {
           <Grid item xs={12} md={3} />
           <Grid 
             item 
-            direction="column"
             style={{textAlign: "center"}}
             xs={12} 
             md={6} 
