@@ -70,7 +70,7 @@ const isNotNewUser = async (uid, email, token, path) => {
     expires: 1,
   });
 
-  (path[0] == "standard" || path[0] == "user")
+  (path[0] == "standard" || path[0] == "signup" || path[0] == "user")
     ? window.location.assign("/")
     : window.location.assign(`/${path.join("/")}`)
 };

@@ -99,7 +99,7 @@ const Bar = (props) => {
                     Giriş Yap{" "}
                   </Typography>
                 </Link>
-                <Link href="/auth/standard" className={classes.menuButton}>
+                <Link href="/auth/signup" className={classes.menuButton}>
                   <Typography variant="h4" className={classes.login}>
                     {" "}
                     Üye Ol{" "}
