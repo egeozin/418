@@ -7,6 +7,7 @@ import "firebase/auth";
 import cookie from "js-cookie";
 import initFirebase from "../utils/auth/initFirebase";
 
+
 // Init the Firebase app.
 initFirebase();
 
@@ -69,10 +70,9 @@ const isNotNewUser = async (uid, email, token, path) => {
     expires: 1,
   });
 
-  console.log(path)
-  path[0] != "standard"
-    ? window.location.assign(`/${path.join("/")}`)
-    : window.location.assign("/");
+  (path[0] == "standard" || path[0] == "user")
+    ? window.location.assign("/")
+    : window.location.assign(`/${path.join("/")}`)
 };
 
 const returnConfig = (path) => {
