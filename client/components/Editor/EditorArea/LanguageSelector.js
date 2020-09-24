@@ -70,8 +70,8 @@ const LanguageSelector = (props) => {
             className={classes.languageField}
             {...params}
             onBlur={props.handleBlur("languages")}
-            label="Programlama Dilleri"
-            placeholder="Dil Seçiniz"
+            label="Etiketler"
+            placeholder="Etiket seçiniz"
             color="secondary"
           />
         )}

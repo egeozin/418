@@ -11,6 +11,7 @@ const languages = [
   { name: "Kotlin", color: "#f9d371" },
   { name: "Rust", color: "#eb7f64" },
   { name: "Pascal", color: "#eb7f64" },
+  { name: "C#", color: "#8A2BE2" },
 ];
 
 export default languages;
