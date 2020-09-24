@@ -65,7 +65,11 @@ const useStyles = makeStyles((theme) => ({
 const updateUser = (userid, username, fullName) =>
   fetch("/api/user/update", {
     method: "POST",
-    body: JSON.stringify({ userId: userid, username: username, fullName: fullName }),
+    body: JSON.stringify({
+      userId: userid,
+      username: username,
+      fullName: fullName,
+    }),
   }).then((res) => res.json());
 
 const UserBody = (props) => {
@@ -79,7 +83,11 @@ const UserBody = (props) => {
 
   const onUserDetailSubmit = async (values) => {
     setEditMode(!editMode);
-    const { updated, error } = await updateUser(data.id, values.username, values.fullName);
+    const { updated, error } = await updateUser(
+      data.id,
+      values.username,
+      values.fullName
+    );
   };
 
   const cancelHandler = () => {
@@ -94,7 +102,7 @@ const UserBody = (props) => {
       fullName: data.name,
       username: data.username,
     },
-    validationSchema: userValidationSchema,
+    validationSchema: userValidationSchema(data.username),
     onSubmit: onUserDetailSubmit,
   });
 
@@ -164,8 +172,9 @@ const UserBody = (props) => {
         )}
       </Grid>
       <Grid container item xs={6} className={classes.buttonContainer}>
-        {user && user.id === data.id && (
-          editMode ? 
+        {user &&
+          user.id === data.id &&
+          (editMode ? (
             <Button
               type="submit"
               variant="contained"
@@ -174,10 +183,10 @@ const UserBody = (props) => {
               className={classes.button}
               onClick={formik.handleSubmit}
               disabled={!formik.isValid}
-            > 
-              Kaydet 
+            >
+              Kaydet
             </Button>
-          : 
+          ) : (
             <Button
               variant="contained"
               size="medium"
@@ -188,7 +197,7 @@ const UserBody = (props) => {
             >
               Profili Düzenle
             </Button>
-        )}
+          ))}
         {user && user.id === data.id && editMode && (
           <Button
             variant="outlined"
