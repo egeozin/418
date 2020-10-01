@@ -17,7 +17,7 @@ export default (req, res) => {
           .then((querySnapshot) => {
               var answers = querySnapshot.docs.map((doc) => {
                 return {...doc.data(), id: doc.id}
-              });
+              }).sort((a, b) => b.creationDate - a.creationDate)
               res.json({q:doc.data(), a:answers, id: req.query.id});
               resolve()
           })

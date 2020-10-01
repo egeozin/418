@@ -107,6 +107,8 @@ const PostBody = (props) => {
   const router = useRouter();
   const { id, userId, userName, data, mutate, onMutate, handleDelete } = props;
 
+  console.log(data);
+
   const [reaction, setReaction] = useState({
     q: {
       id: id,
