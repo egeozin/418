@@ -29,6 +29,6 @@ For SEO Support: [Next-SEO](https://github.com/garmeeh/next-seo)
 ## Backend
 
 Data Model: 
-![alt text](https://github.com/egeozin/418/blob/master/data-model.png "Data-Model")
+![alt text](https://github.com/egeozin/418/blob/master/data_model.png "Data-Model")
 
 
