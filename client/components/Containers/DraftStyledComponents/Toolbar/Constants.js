@@ -11,11 +11,19 @@ const blockTypes = [
   },
   {
     label: 'H3',
-    type: 'header-three',
+    style: 'header-three',
   },
   {
     label: 'H4',
-    type: 'header-four',
+    style: 'header-four',
+  },
+  {
+    label: '``',
+    style: 'blockquote',
+  },
+  {
+    label: 'Code',
+    style: 'code-block',
   },
 ];
 

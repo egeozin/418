@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RenderInlineStyles } from './InlineStyle';
-import { RenderCustomStyles } from './CustomStyles';
 
 const ToolbarContainer = styled.div`
   display: flex;
@@ -22,10 +21,6 @@ const Toolbar = ({ editorState, updateEditorState }) => {
         editorState={editorState}
         updateEditorState={updateEditorState}
       />
-      {/* <RenderCustomStyles
-        editorState={editorState}
-        updateEditorState={updateEditorState}
-      /> */}
     </ToolbarContainer>
   );
 };

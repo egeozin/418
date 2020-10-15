@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const ToolbarItem = styled.div`
-  width: 28px;
-  height: 27px;
+  width: 40px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
