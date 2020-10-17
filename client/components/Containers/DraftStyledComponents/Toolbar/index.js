@@ -14,12 +14,14 @@ const ToolbarContainer = styled.div`
   background-color: #d3d8ed;
 `;
 
-const Toolbar = ({ editorState, updateEditorState }) => {
+const Toolbar = ({ editorState, updateEditorState, onUndo, onRedo }) => {
   return (
     <ToolbarContainer>
       <RenderInlineStyles
         editorState={editorState}
         updateEditorState={updateEditorState}
+        onUndo={onUndo}
+        onRedo={onRedo}
       />
     </ToolbarContainer>
   );

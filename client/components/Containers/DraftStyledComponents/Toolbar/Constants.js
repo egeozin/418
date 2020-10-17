@@ -1,4 +1,4 @@
-import { FormatBold, FormatItalic, FormatUnderlined } from '@material-ui/icons';
+import { FormatBold, FormatItalic } from '@material-ui/icons';
 
 const blockTypes = [
   {
@@ -37,11 +37,6 @@ const inlineStyles = [
     label: 'italic',
     style: 'ITALIC',
     icon: <FormatItalic />,
-  },
-  {
-    label: 'Underline',
-    style: 'UNDERLINE',
-    icon: <FormatUnderlined />,
   },
 ];
 

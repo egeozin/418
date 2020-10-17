@@ -2,15 +2,18 @@ import React from 'react';
 import { inlineStyles, blockTypes } from './Constants';
 import { ToolbarItem, Container } from './Common';
 import { RichUtils } from 'draft-js';
-
-export function RenderInlineStyles({ editorState, updateEditorState }) {
-  const applyStyle = (e, style) => {
-    e.preventDefault();
+import { Redo, Undo } from '@material-ui/icons';
+export function RenderInlineStyles({
+  editorState,
+  updateEditorState,
+  onUndo,
+  onRedo,
+}) {
+  const applyStyle = (style) => {
     updateEditorState(RichUtils.toggleInlineStyle(editorState, style));
   };
 
-  const applyStyleToBlock = (e, style) => {
-    e.preventDefault();
+  const applyStyleToBlock = (style) => {
     updateEditorState(RichUtils.toggleBlockType(editorState, style));
   };
 
@@ -24,20 +27,26 @@ export function RenderInlineStyles({ editorState, updateEditorState }) {
       {blockTypes.map((item, idx) => {
         return (
           <ToolbarItem
-            isActive={isActive(item.style)}
             key={`${item.label}-${idx}`}
-            onClick={(e) => applyStyleToBlock(e, item.style)}
+            onClick={() => applyStyleToBlock(item.style)}
           >
             {item.icon || item.label}
           </ToolbarItem>
         );
       })}
+      <ToolbarItem onClick={onUndo}>
+        <Undo />
+      </ToolbarItem>
+      <ToolbarItem onClick={onRedo}>
+        <Redo />
+      </ToolbarItem>
+
       {inlineStyles.map((item, idx) => {
         return (
           <ToolbarItem
             isActive={isActive(item.style)}
             key={`${item.label}-${idx}`}
-            onClick={(e) => applyStyle(e, item.style)}
+            onClick={() => applyStyle(item.style)}
             blockquote={true}
           >
             {item.icon || item.label}

@@ -6,6 +6,9 @@ import {
   EditorWrapper,
   EditorContainer,
 } from '../../../components/Containers/DraftStyledComponents';
+import Prism from 'prismjs';
+import PrismDecorator from 'draft-js-prism';
+import 'prismjs/themes/prism-funky.css';
 
 //Custom block styles
 const useStyles = makeStyles(() => ({
@@ -30,8 +33,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+//TODO LINK- REDO- UNDO- CLEAR- COPIED TEXT
+
 const DraftEditor = ({ handleChange, handleBlur, forwardRef, label }) => {
   const classes = useStyles();
+  const decorator = new PrismDecorator({
+    prism: Prism,
+    defaultSyntax: 'javascript',
+  });
 
   //Applies custom styles to specific blocks.
   const getBlockStyle = (block) => {
@@ -45,15 +54,25 @@ const DraftEditor = ({ handleChange, handleBlur, forwardRef, label }) => {
     }
   };
 
-  const [editorState, setEditorState] = React.useState(() =>
-    EditorState.createEmpty()
+  const [editorState, setEditorState] = React.useState(
+    EditorState.createEmpty(decorator)
   );
-
   const onChange = (editorState) => setEditorState(editorState);
+  const onUndo = () => {
+    onChange(EditorState.undo(editorState));
+  };
+  const onRedo = () => {
+    onChange(EditorState.redo(editorState));
+  };
 
   return (
     <EditorWrapper>
-      <Toolbar updateEditorState={onChange} editorState={editorState} />
+      <Toolbar
+        updateEditorState={onChange}
+        editorState={editorState}
+        onUndo={onUndo}
+        onRedo={onRedo}
+      />
       <EditorContainer>
         <Editor
           editorState={editorState}
