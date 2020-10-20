@@ -7,28 +7,27 @@ import useSWR from "swr";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { post } from "../../../utils/db/schemas";
 
-const fetcher = async (...args) => {
-  const res = await fetch(...args);
-  return res.json();
-};
-
 const postResponse = (rData) =>
   fetch("/api/soru/postResponse", {
     method: "POST",
     body: JSON.stringify(rData),
   }).then((res) => res.json());
 
-const deletePost = (userid, postid,parentid) =>
-  fetch('/api/soru/delete', {
-    method: 'POST',
-    body: JSON.stringify({ userId: userid, postId: postid, parentId : parentid })
-  }).then((res) => res.json())
+const deletePost = (userid, postid, parentid) =>
+  fetch("/api/soru/delete", {
+    method: "POST",
+    body: JSON.stringify({
+      userId: userid,
+      postId: postid,
+      parentId: parentid,
+    }),
+  }).then((res) => res.json());
 
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
   const { user, logout } = useUser();
-  const { data, error, mutate } = useSWR(`/api/soru/${id}`, fetcher);
+  const { data, error, mutate } = useSWR(`/api/soru/${id}`);
 
   const onMutate = (rData) => {
     mutate(async (data) => {
@@ -37,19 +36,19 @@ const Post = () => {
         ...data,
         q: {
           ...data.q,
-          answerCount: result.q.answerCount
+          answerCount: result.q.answerCount,
         },
-        a: result.a
+        a: result.a,
       };
     }, false);
   };
 
-  const handleDelete = (userId,postId,parentId) =>{
-    mutate(async(data)=>{
-      const result = await deletePost(userId,postId,parentId);
+  const handleDelete = (userId, postId, parentId) => {
+    mutate(async (data) => {
+      const result = await deletePost(userId, postId, parentId);
       return {
         ...data,
-        a: result.a
+        a: result.a,
       };
     }, false);
   };
