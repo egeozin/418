@@ -1,5 +1,11 @@
 import React from 'react';
-import { Editor, EditorState } from 'draft-js';
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  ContentState,
+  convertToRaw,
+} from 'draft-js';
 import Toolbar from '../../Containers/DraftStyledComponents/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -21,21 +27,13 @@ const useStyles = makeStyles(() => ({
     padding: '10px 20px',
   },
   codeBlock: {
-    color: '#fefefe',
-    padding: '8px 16px',
-    backgroundColor: '#4C5B9C',
-    fontFamily: 'monospace',
-    lineHeight: 1.5,
-    whiteSpace: 'pre-wrap',
-    overflowWrap: 'break-word',
-    maxHeight: '700px',
-    overflowY: 'auto',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontSize: '16px',
+    padding: '20px',
   },
 }));
 
-//TODO LINK- REDO- UNDO- CLEAR- COPIED TEXT
-
-const DraftEditor = ({ handleChange, handleBlur, forwardRef, label }) => {
+const DraftEditor = ({ handleChange, handleBlur, label }) => {
   const classes = useStyles();
   const decorator = new PrismDecorator({
     prism: Prism,
@@ -55,14 +53,61 @@ const DraftEditor = ({ handleChange, handleBlur, forwardRef, label }) => {
   };
 
   const [editorState, setEditorState] = React.useState(
-    EditorState.createEmpty(decorator)
+    EditorState.createWithContent(ContentState.createFromText(label), decorator)
   );
-  const onChange = (editorState) => setEditorState(editorState);
+
+  const onChange = (editorState) => {
+    setEditorState(editorState);
+    handleChange('bodyText', convertToRaw(editorState.getCurrentContent()));
+  };
+
+  const onBlur = () => {
+    handleBlur('bodyText');
+  };
+
   const onUndo = () => {
     onChange(EditorState.undo(editorState));
   };
+
   const onRedo = () => {
     onChange(EditorState.redo(editorState));
+  };
+
+  const onClear = () => {
+    setEditorState(
+      EditorState.createWithContent(ContentState.createFromText(''))
+    );
+  };
+
+  const onTab = (e) => {
+    const maxDepth = 4;
+    onChange(RichUtils.onTab(e, editorState, maxDepth));
+  };
+
+  // const handlePastedText = (text, html, editorState) => {
+  //   const pastedBlocks = ContentState.createFromText(text).blockMap;
+  //   console.log('1212', pastedBlocks);
+  //   const newState = Modifier.replaceWithFragment(
+  //     editorState.getCurrentContent(),
+  //     editorState.getSelection(),
+  //     pastedBlocks
+  //   );
+  //   const newEditorState = EditorState.push(
+  //     editorState,
+  //     newState,
+  //     'insert-fragment'
+  //   );
+  //   onChange(newEditorState);
+  //   return 'handled';
+  // };
+
+  const handleKeyCommand = (command) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      onChange(newState);
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -72,13 +117,17 @@ const DraftEditor = ({ handleChange, handleBlur, forwardRef, label }) => {
         editorState={editorState}
         onUndo={onUndo}
         onRedo={onRedo}
+        onClear={onClear}
       />
       <EditorContainer>
         <Editor
+          onBlur={onBlur}
+          // handlePastedText={handlePastedText}
+          handleKeyCommand={handleKeyCommand}
           editorState={editorState}
           onChange={onChange}
-          placeholder='Question...'
           blockStyleFn={getBlockStyle}
+          onTab={onTab}
         />
       </EditorContainer>
     </EditorWrapper>

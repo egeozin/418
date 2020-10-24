@@ -22,9 +22,11 @@ const blockTypes = [
     style: 'blockquote',
   },
   {
-    label: 'Code',
+    label: '< >',
     style: 'code-block',
   },
+  { label: 'UL', style: 'unordered-list-item' },
+  { label: 'OL', style: 'ordered-list-item' },
 ];
 
 const inlineStyles = [

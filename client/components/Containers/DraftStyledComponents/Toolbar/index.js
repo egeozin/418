@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RenderInlineStyles } from './InlineStyle';
+import { RenderStyles } from './RenderStyles';
 
 const ToolbarContainer = styled.div`
   display: flex;
@@ -14,14 +14,21 @@ const ToolbarContainer = styled.div`
   background-color: #d3d8ed;
 `;
 
-const Toolbar = ({ editorState, updateEditorState, onUndo, onRedo }) => {
+const Toolbar = ({
+  editorState,
+  updateEditorState,
+  onUndo,
+  onRedo,
+  onClear,
+}) => {
   return (
     <ToolbarContainer>
-      <RenderInlineStyles
+      <RenderStyles
         editorState={editorState}
         updateEditorState={updateEditorState}
         onUndo={onUndo}
         onRedo={onRedo}
+        onClear={onClear}
       />
     </ToolbarContainer>
   );

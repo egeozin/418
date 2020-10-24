@@ -2,18 +2,21 @@ import React from 'react';
 import { inlineStyles, blockTypes } from './Constants';
 import { ToolbarItem, Container } from './Common';
 import { RichUtils } from 'draft-js';
-import { Redo, Undo } from '@material-ui/icons';
-export function RenderInlineStyles({
+import { Redo, Undo, Clear } from '@material-ui/icons';
+
+const RenderStyles = ({
   editorState,
   updateEditorState,
   onUndo,
   onRedo,
-}) {
+  onClear,
+}) => {
   const applyStyle = (style) => {
     updateEditorState(RichUtils.toggleInlineStyle(editorState, style));
   };
 
-  const applyStyleToBlock = (style) => {
+  const applyStyleToBlock = (e, style) => {
+    e.preventDefault();
     updateEditorState(RichUtils.toggleBlockType(editorState, style));
   };
 
@@ -28,7 +31,7 @@ export function RenderInlineStyles({
         return (
           <ToolbarItem
             key={`${item.label}-${idx}`}
-            onClick={() => applyStyleToBlock(item.style)}
+            onClick={(e) => applyStyleToBlock(e, item.style)}
           >
             {item.icon || item.label}
           </ToolbarItem>
@@ -40,7 +43,9 @@ export function RenderInlineStyles({
       <ToolbarItem onClick={onRedo}>
         <Redo />
       </ToolbarItem>
-
+      <ToolbarItem onClick={onClear}>
+        <Clear />
+      </ToolbarItem>
       {inlineStyles.map((item, idx) => {
         return (
           <ToolbarItem
@@ -55,4 +60,6 @@ export function RenderInlineStyles({
       })}
     </Container>
   );
-}
+};
+
+export { RenderStyles };
