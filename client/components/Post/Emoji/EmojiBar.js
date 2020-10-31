@@ -1,31 +1,31 @@
-import React,  { useState } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Emoji from "react-emoji-render";
-import Badge from "@material-ui/core/Badge";
+import React, { useState } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import Emoji from 'react-emoji-render';
+import Badge from '@material-ui/core/Badge';
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    margin: "0px 0px",
+    margin: '0px 0px',
   },
   iconButton: {
-    transition: "all .3s ease-in-out",
-    "&:hover": {
-      backgroundColor: "#dddddd30",
-      transform: "scale(1.1)",
+    transition: 'all .3s ease-in-out',
+    '&:hover': {
+      backgroundColor: '#dddddd30',
+      transform: 'scale(1.1)',
     },
   },
   selfIconButton: {
-    transition: "all .3s ease-in-out",
+    transition: 'all .3s ease-in-out',
     backgroundColor: theme.palette.background.paper,
-    "&:hover": {
+    '&:hover': {
       backgroundColor: theme.palette.background.border,
-      transform: "scale(1.1)",
+      transform: 'scale(1.1)',
     },
   },
   badge: {
-    padding: "5px",
+    padding: '5px',
   },
 }));
 
@@ -33,7 +33,7 @@ const EmojiBar = (props) => {
   const classes = useStyles();
   const { likeCount, clapCount, confusedCount, likes, claps, confuseds } = props.reaction;
   const [selected, setSelected] = useState({
-    like: likes.includes(props.userId), 
+    like: likes.includes(props.userId),
     clap: claps.includes(props.userId),
     confused: confuseds.includes(props.userId),
   });
@@ -44,21 +44,20 @@ const EmojiBar = (props) => {
         edge="start"
         className={selected.like ? classes.selfIconButton : classes.iconButton}
         onClick={() => {
-          let newSelected = !selected.like
+          let newSelected = !selected.like;
           setSelected({
             ...selected,
-            like: newSelected
+            like: newSelected,
           });
           return props.reactionUpvoteHandler(
-            "likeCount",
+            'likeCount',
             props.postType,
             props.index,
             props.postId,
             props.userId,
-            newSelected
+            newSelected,
           );
-          }
-        }
+        }}
       >
         <Badge badgeContent={likeCount} className={classes.badge}>
           <Emoji text=":+1:" />
@@ -68,20 +67,20 @@ const EmojiBar = (props) => {
       <IconButton
         className={selected.clap ? classes.selfIconButton : classes.iconButton}
         onClick={() => {
-          let newSelected = !selected.clap
+          let newSelected = !selected.clap;
           setSelected({
             ...selected,
-            clap: newSelected
+            clap: newSelected,
           });
           return props.reactionUpvoteHandler(
-            "clapCount",
+            'clapCount',
             props.postType,
             props.index,
             props.postId,
             props.userId,
-            newSelected
-          )}
-        }
+            newSelected,
+          );
+        }}
       >
         <Badge badgeContent={clapCount} className={classes.badge}>
           <Emoji text=":clapping_hands:" />
@@ -90,20 +89,20 @@ const EmojiBar = (props) => {
       <IconButton
         className={selected.confused ? classes.selfIconButton : classes.iconButton}
         onClick={() => {
-          let newSelected = !selected.confused
+          let newSelected = !selected.confused;
           setSelected({
             ...selected,
-            confused: newSelected
+            confused: newSelected,
           });
           return props.reactionUpvoteHandler(
-            "confusedCount",
+            'confusedCount',
             props.postType,
             props.index,
             props.postId,
             props.userId,
-            newSelected
-          )}
-        }
+            newSelected,
+          );
+        }}
       >
         <Badge badgeContent={confusedCount} className={classes.badge}>
           <Emoji text=":confused:" />

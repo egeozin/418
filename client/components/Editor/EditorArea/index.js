@@ -1,2 +1,2 @@
-import EditorArea from "./EditorArea";
+import EditorArea from './EditorArea';
 export default EditorArea;

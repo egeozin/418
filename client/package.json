@@ -4,7 +4,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "format": "prettier --write \"**/*.{js,ts,tsx,jsx}\""
+  },
+  "lint-staged": {
+    "*.@(js|jsx)": [
+      "yarn format"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@material-ui/core": "^4.5.2",
@@ -25,7 +36,7 @@
     "next": "latest",
     "next-cookies": "^2.0.3",
     "next-redux-wrapper": "latest",
-    "next-seo": "^4.7.3",
+    "next-seo": "^4.14.1",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -40,5 +51,10 @@
     "swr": "0.2.2",
     "underscore": "^1.9.1",
     "yup": "^0.29.3"
+  },
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.0",
+    "prettier": "^2.1.2"
   }
 }

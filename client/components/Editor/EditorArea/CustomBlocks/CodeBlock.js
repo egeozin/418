@@ -1,17 +1,17 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   codeBlock: {
-    color: "#fefefe",
-    padding: "8px 16px",
-    backgroundColor: "#4C5B9C",
-    fontFamily: "monospace",
+    color: '#fefefe',
+    padding: '8px 16px',
+    backgroundColor: '#4C5B9C',
+    fontFamily: 'monospace',
     lineHeight: 1.5,
-    whiteSpace: "pre-wrap",
-    overflowWrap: "break-word",
-    maxHeight: "700px",
-    overflowY: "auto",
+    whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    maxHeight: '700px',
+    overflowY: 'auto',
   },
 }));
 

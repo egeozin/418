@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import MUIRichTextEditor from "mui-rte";
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import { convertToRaw } from "draft-js";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import MUIRichTextEditor from 'mui-rte';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { convertToRaw } from 'draft-js';
+import { useRouter } from 'next/router';
 
-import { makeStyles } from "@material-ui/core/styles";
-import theme from "../../../src/theme";
-import palette from "../../../src/palette";
-import CodeIcon from "@material-ui/icons/Code";
-import CodeBlock from "./CustomBlocks/CodeBlock";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import Blockquote from "./CustomBlocks/Blockquote";
+import { makeStyles } from '@material-ui/core/styles';
+import theme from '../../../src/theme';
+import palette from '../../../src/palette';
+import CodeIcon from '@material-ui/icons/Code';
+import CodeBlock from './CustomBlocks/CodeBlock';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
+import Blockquote from './CustomBlocks/Blockquote';
 
 const updateTheme = {
   ...theme,
@@ -31,23 +31,15 @@ const updateTheme = {
 const GenericEditor = (props) => {
   const [loading, setLoading] = useState(false);
   const [toolbar, setToolbar] = useState(false);
-  const {
-    forwardRef,
-    label,
-    handleChange,
-    handleBlur,
-    userId,
-    postId,
-    defaultValue,
-  } = props;
+  const { forwardRef, label, handleChange, handleBlur, userId, postId, defaultValue } = props;
   const router = useRouter();
 
   const onChange = (editorState) => {
-    handleChange("bodyText", convertToRaw(editorState.getCurrentContent()));
+    handleChange('bodyText', convertToRaw(editorState.getCurrentContent()));
   };
 
   const onBlur = () => {
-    handleBlur("bodyText");
+    handleBlur('bodyText');
   };
 
   const onFocus = () => {
@@ -70,27 +62,27 @@ const GenericEditor = (props) => {
         toolbar={toolbar}
         onChange={onChange}
         controls={[
-          "title",
-          "bold",
-          "undo",
-          "redo",
-          "link",
-          "bulletList",
-          "Blockquote",
-          "codeBlock",
-          "clear",
+          'title',
+          'bold',
+          'undo',
+          'redo',
+          'link',
+          'bulletList',
+          'Blockquote',
+          'codeBlock',
+          'clear',
         ]}
         customControls={[
           {
-            name: "codeBlock",
+            name: 'codeBlock',
             icon: <CodeIcon />,
-            type: "block",
+            type: 'block',
             blockWrapper: <CodeBlock />,
           },
           {
-            name: "Blockquote",
+            name: 'Blockquote',
             icon: <FormatQuoteIcon />,
-            type: "block",
+            type: 'block',
             blockWrapper: <Blockquote />,
           },
         ]}
