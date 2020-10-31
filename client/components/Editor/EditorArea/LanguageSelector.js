@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import Chip from "@material-ui/core/Chip";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import React, { useState } from 'react';
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
-import languages from "../../../src/languages";
-import { nominalTypeHack } from "prop-types";
+import languages from '../../../src/languages';
+import { nominalTypeHack } from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: "20px 0px",
+    margin: '20px 0px',
     width: 500,
-    "& > * + *": {
+    '& > * + *': {
       marginTop: theme.spacing(3),
     },
   },
   tag: {
-    color: "#fff",
+    color: '#fff',
   },
   inputRoot: {
-    "& fieldset": {
-      border: "1px solid #fff",
+    '& fieldset': {
+      border: '1px solid #fff',
     },
   },
   languageField: {
-    height: "55px",
+    height: '55px',
   },
 }));
 
@@ -33,7 +33,7 @@ const LanguageSelector = (props) => {
   const [value, setValue] = useState([]);
 
   const handleChange = (vals) => {
-    props.handleChange("languages", vals);
+    props.handleChange('languages', vals);
     setValue(vals);
   };
 
@@ -69,7 +69,7 @@ const LanguageSelector = (props) => {
           <TextField
             className={classes.languageField}
             {...params}
-            onBlur={props.handleBlur("languages")}
+            onBlur={props.handleBlur('languages')}
             label="Etiketler"
             placeholder="Etiket seçiniz"
             color="secondary"

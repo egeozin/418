@@ -1,14 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   blockQuote: {
-    color: "#fefefe",
-    fontStyle: "italic",
-    borderLeft: "4px solid #d5d5d5",
+    color: '#fefefe',
+    fontStyle: 'italic',
+    borderLeft: '4px solid #d5d5d5',
 
-    "& > div": {
-      margin: "18px 40px",
+    '& > div': {
+      margin: '18px 40px',
     },
   },
 }));

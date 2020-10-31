@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: 20,
-    width: "100%",
-    textAlign: "center",
+    width: '100%',
+    textAlign: 'center',
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     padding: 10,
   },
   value: {
@@ -23,38 +23,29 @@ const useStyles = makeStyles((theme) => ({
   },
   TextFieldContainer: {
     marginBottom: 20,
-    "& input": {
-      color: "#fff",
+    '& input': {
+      color: '#fff',
     },
-    "& label": {
-      color: "#fff",
+    '& label': {
+      color: '#fff',
     },
   },
   error: {
     color: theme.palette.secondary.main,
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 10,
   },
   formInputContainer: {
-    position: "relative",
-    width: "100%",
+    position: 'relative',
+    width: '100%',
     marginBottom: 20,
   },
 }));
 
 const InfoField = (props) => {
   const classes = useStyles();
-  const {
-    label,
-    isDisabled,
-    value,
-    handleChange,
-    isEditMode,
-    id,
-    name,
-    formik,
-  } = props;
+  const { label, isDisabled, value, handleChange, isEditMode, id, name, formik } = props;
 
   if (isEditMode) {
     return (
@@ -73,9 +64,7 @@ const InfoField = (props) => {
             shrink: true,
           }}
         />
-        {formik.errors[id] ? (
-          <div className={classes.error}>{formik.errors[id]}</div>
-        ) : null}
+        {formik.errors[id] ? <div className={classes.error}>{formik.errors[id]}</div> : null}
       </Grid>
     );
   } else {

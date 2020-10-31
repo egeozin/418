@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import Link from "../Link";
-import MUIRichTextEditor from "mui-rte";
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import CodeIcon from "@material-ui/icons/Code";
-import CodeBlock from "../Editor/EditorArea/CustomBlocks/CodeBlock";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import Blockquote from "../Editor/EditorArea/CustomBlocks/Blockquote";
-import DeleteIcon from "@material-ui/icons/Delete";
-import DeletePopover from "./DeletePopover";
+import React, { useState, useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Link from '../Link';
+import MUIRichTextEditor from 'mui-rte';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import CodeIcon from '@material-ui/icons/Code';
+import CodeBlock from '../Editor/EditorArea/CustomBlocks/CodeBlock';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
+import Blockquote from '../Editor/EditorArea/CustomBlocks/Blockquote';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeletePopover from './DeletePopover';
 
-import { makeStyles } from "@material-ui/core/styles";
-import theme from "../../src/theme";
-import palette from "../../src/palette";
-import EmojiBar from "./Emoji/EmojiBar";
-import { addZero } from "../../utils/utilFunctions";
+import { makeStyles } from '@material-ui/core/styles';
+import theme from '../../src/theme';
+import palette from '../../src/palette';
+import EmojiBar from './Emoji/EmojiBar';
+import { addZero } from '../../utils/utilFunctions';
 
 const updateTheme = {
   ...theme,
@@ -43,22 +43,22 @@ const updateTheme = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: "none",
+    boxShadow: 'none',
   },
   flexGrow: {
     flexGrow: 1,
   },
   title: {
     fontSize: 36,
-    fontFamily: "Hind, sans-serif",
+    fontFamily: 'Hind, sans-serif',
     fontWeight: 700,
   },
   rightTitle: {
-    lineHeight: "29px",
+    lineHeight: '29px',
   },
   divider: {
     marginBottom: 20,
-    backgroundColor: "#d7d7d7",
+    backgroundColor: '#d7d7d7',
   },
   postContainer: {},
   postGridContainer: {
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
   answerPosterContainer: {
     marginTop: 20,
-    display: "flex",
+    display: 'flex',
     paddingBottom: 10,
   },
   answerText: {
@@ -106,16 +106,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -18,
   },
   languageButton: {
-    background:
-      "linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)",
+    background: 'linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)',
     borderRadius: 3,
-    boxShadow: "none",
+    boxShadow: 'none',
     border: 0,
     fontSize: 14,
     fontWeight: 600,
-    color: "white",
+    color: 'white',
     height: 24,
-    padding: "0 10px",
+    padding: '0 10px',
   },
 }));
 
@@ -128,7 +127,7 @@ const PostAnswer = (props) => {
 
   if (data.creationDate) {
     const date = new Date(data.creationDate.seconds * 1000);
-    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    const formattedDate = new Intl.DateTimeFormat('tr-TR').format(date);
     const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
     renderDate = (
       <Typography>
@@ -140,12 +139,7 @@ const PostAnswer = (props) => {
   return (
     <>
       <Divider className={classes.divider} />
-      <Grid
-        container
-        direction="row"
-        spacing={1}
-        className={classes.answersContainer}
-      >
+      <Grid container direction="row" spacing={1} className={classes.answersContainer}>
         <Grid
           item
           container
@@ -159,7 +153,7 @@ const PostAnswer = (props) => {
             <IconButton
               onClick={(e) => {
                 let newUpvoted = !upvoted;
-                props.upvoteHandler(e, id, props.userId, "a", newUpvoted);
+                props.upvoteHandler(e, id, props.userId, 'a', newUpvoted);
                 setUpvoted(newUpvoted);
               }}
               edge="start"
@@ -170,22 +164,20 @@ const PostAnswer = (props) => {
             </IconButton>
           </Grid>
           <Grid item>
-            <Typography className={classes.voteCount}>
-              {data.voteCount}
-            </Typography>
+            <Typography className={classes.voteCount}>{data.voteCount}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={10} md={10}>
           <Grid
             container
             direction="column"
-            justify={"space-between"}
+            justify={'space-between'}
             className={classes.answerContainer}
           >
             <Grid
               container
               direction="row"
-              justify={"space-between"}
+              justify={'space-between'}
               className={classes.answerContainer}
             >
               <Grid item>
@@ -196,15 +188,15 @@ const PostAnswer = (props) => {
                       toolbar={false}
                       customControls={[
                         {
-                          name: "codeBlock",
+                          name: 'codeBlock',
                           icon: <CodeIcon />,
-                          type: "block",
+                          type: 'block',
                           blockWrapper: <CodeBlock />,
                         },
                         {
-                          name: "Blockquote",
+                          name: 'Blockquote',
                           icon: <FormatQuoteIcon />,
-                          type: "block",
+                          type: 'block',
                           blockWrapper: <Blockquote />,
                         },
                       ]}
@@ -212,11 +204,7 @@ const PostAnswer = (props) => {
                     />
                   </MuiThemeProvider>
                 ) : (
-                  <Typography
-                    variant="body1"
-                    component="body"
-                    className={classes.questionText}
-                  >
+                  <Typography variant="body1" component="body" className={classes.questionText}>
                     {data.body.charAt(0).toUpperCase() + data.body.slice(1)}
                   </Typography>
                 )}
@@ -244,9 +232,7 @@ const PostAnswer = (props) => {
             <Grid item>
               <Grid item className={classes.answerPosterContainer}>
                 <Link href="/user/[id]/" as={`/user/${data.ownerUserId}`}>
-                  <Typography className={classes.answerPoster}>
-                    @{data.ownerName}
-                  </Typography>
+                  <Typography className={classes.answerPoster}>@{data.ownerName}</Typography>
                 </Link>
                 {renderDate}
               </Grid>
@@ -256,7 +242,7 @@ const PostAnswer = (props) => {
                 index={props.index}
                 postId={id}
                 userId={props.userId}
-                postType={"a"}
+                postType={'a'}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}
               />

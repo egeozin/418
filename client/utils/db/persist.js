@@ -1,55 +1,58 @@
-require('dotenv').config({path:'./.env.local' })
-const firebase = require("firebase");
+require('dotenv').config({ path: './.env.local' });
+const firebase = require('firebase');
 // Required for side-effects
-require("firebase/firestore");
+require('firebase/firestore');
 const { questions, answers, users } = require('../fakeData');
 const { firestoreAutoId } = require('../utilFunctions');
 
 firebase.initializeApp({
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
-  });
-  
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+});
+
 const db = firebase.firestore();
 
-var usersRef = db.collection("users");
+var usersRef = db.collection('users');
 
 const addUsersToDb = (u, userIDs) => {
-    return usersRef.add({
-        username: u.username,
-        name: u.name, 
-        description: "",
-        creationDate: firebase.firestore.FieldValue.serverTimestamp(),
-        lastAccessDate: firebase.firestore.FieldValue.serverTimestamp(),
-        claps:0,
-        confuseds: 0,
-        eyvallahs: 0,
-        likes: 0,
-        location: "",
-        photoImageURL: "",
-        reputation: 0,
-        upvotes: [], 
-    }).then((userRef) => {
-        userIDs.push(userRef.id)
-    }).catch((err) => {
-        console.error("Error adding document: ", err);
+  return usersRef
+    .add({
+      username: u.username,
+      name: u.name,
+      description: '',
+      creationDate: firebase.firestore.FieldValue.serverTimestamp(),
+      lastAccessDate: firebase.firestore.FieldValue.serverTimestamp(),
+      claps: 0,
+      confuseds: 0,
+      eyvallahs: 0,
+      likes: 0,
+      location: '',
+      photoImageURL: '',
+      reputation: 0,
+      upvotes: [],
     })
-}
+    .then((userRef) => {
+      userIDs.push(userRef.id);
+    })
+    .catch((err) => {
+      console.error('Error adding document: ', err);
+    });
+};
 
 async function usersForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
-    }
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
 }
 
 const addUsers = async () => {
-    var userIds = [];
-    await usersForEach(users, async (u)  => {
-        await addUsersToDb(u, userIds)
-    })
-    return userIds
-}
+  var userIds = [];
+  await usersForEach(users, async (u) => {
+    await addUsersToDb(u, userIds);
+  });
+  return userIds;
+};
 
 /*
 const addPosts = async (userIds) => {
@@ -91,9 +94,8 @@ const addPosts = async (userIds) => {
     })
 }*/
 
-const result = addUsers().then(userIds => {
-    console.log("users added!")
-    return true
-    //addPosts(userIds)
-})
-
+const result = addUsers().then((userIds) => {
+  console.log('users added!');
+  return true;
+  //addPosts(userIds)
+});

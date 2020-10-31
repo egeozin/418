@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import PostQuestion from "./PostQuestion";
-import PostAnswers from "./PostAnswers";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import PostQuestion from './PostQuestion';
+import PostAnswers from './PostAnswers';
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: "none",
+    boxShadow: 'none',
   },
   flexGrow: {
     flexGrow: 1,
@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 36,
     lineHeight: 1.2,
-    fontFamily: "Hind, sans-serif",
+    fontFamily: 'Hind, sans-serif',
     fontWeight: 700,
   },
   oops: {
     fontSize: 28,
-    fontFamily: "Hind, sans-serif",
+    fontFamily: 'Hind, sans-serif',
     fontWeight: 700,
   },
   rightTitle: {
-    lineHeight: "29px",
+    lineHeight: '29px',
   },
   divider: {
     marginTop: 10,
@@ -66,39 +66,43 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -18,
   },
   languageButton: {
-    background:
-      "linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)",
+    background: 'linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)',
     borderRadius: 3,
-    boxShadow: "none",
+    boxShadow: 'none',
     border: 0,
     fontSize: 14,
     fontWeight: 600,
-    color: "white",
+    color: 'white',
     height: 24,
-    padding: "0 10px",
+    padding: '0 10px',
   },
 }));
 
 const selectReaction = (reactionType) => {
-  switch(reactionType) {
-      case 'likeCount':
-          return 'likes'
-      case 'clapCount':
-          return 'claps'
-      case 'confusedCount':
-          return 'confuseds'
+  switch (reactionType) {
+    case 'likeCount':
+      return 'likes';
+    case 'clapCount':
+      return 'claps';
+    case 'confusedCount':
+      return 'confuseds';
   }
-}
+};
 const updateReaction = (userid, postid, reactionType, selected) => {
-  return fetch("/api/soru/react", {
-    method: "POST",
-    body: JSON.stringify({ userId: userid, postId: postid, reaction: reactionType, selected: selected }),
+  return fetch('/api/soru/react', {
+    method: 'POST',
+    body: JSON.stringify({
+      userId: userid,
+      postId: postid,
+      reaction: reactionType,
+      selected: selected,
+    }),
   }).then((res) => res.json());
-}
+};
 
 const updateVote = (userid, postid, selected) =>
-  fetch("/api/soru/upvote", {
-    method: "POST",
+  fetch('/api/soru/upvote', {
+    method: 'POST',
     body: JSON.stringify({ userId: userid, postId: postid, selected: selected }),
   }).then((res) => res.json());
 
@@ -109,17 +113,18 @@ const PostBody = (props) => {
 
   console.log(data);
 
-  const [reaction, setReaction] = useState({
-    q: {
-      id: id,
-      likeCount: data.q.likeCount,
-      clapCount: data.q.clapCount,
-      confusedCount: data.q.confusedCount,
-      likes: data.q.likes,
-      claps: data.q.claps,
-      confuseds: data.q.confuseds
-    },
-    a: data.a.map((el) => {
+  const [reaction, setReaction] = useState(
+    {
+      q: {
+        id: id,
+        likeCount: data.q.likeCount,
+        clapCount: data.q.clapCount,
+        confusedCount: data.q.confusedCount,
+        likes: data.q.likes,
+        claps: data.q.claps,
+        confuseds: data.q.confuseds,
+      },
+      a: data.a.map((el) => {
         return {
           id: el.id,
           likeCount: el.likeCount,
@@ -127,98 +132,116 @@ const PostBody = (props) => {
           confusedCount: el.confusedCount,
           likes: el.likes,
           claps: el.claps,
-          confuseds: el.confuseds
+          confuseds: el.confuseds,
         };
       }),
-  }, []);
-
+    },
+    [],
+  );
 
   const reactionUpvoteHandler = (reactionType, postType, i, postId, userId, selected) => {
     if (userId) {
-        if (postType === "a") {
-          var newReaction = {
-            ...reaction,
-            a: data.a.map(el => {
-                if (el.id === postId) {
-                  return {
-                    id: el.id, 
-                    likeCount: el.likeCount, 
-                    clapCount: el.clapCount, 
-                    confusedCount: el.confusedCount,
-                    likes: el.likes,
-                    claps: el.claps,
-                    confuseds: el.confuseds,
-                    [selectReaction(reactionType)]: selected ? [...el[selectReaction(reactionType)], userId] : el[selectReaction(reactionType)].filter(e => e != userId ),
-                    [reactionType]: selected ? el[reactionType] + 1 : el[reactionType] - 1 ,
-                  };
-                } else {
-                  return el;
-                }
-              }),
-          };
-          var newData = {
-            ...data,
-            a: data.a.map(el => {
-                if (el.id === postId) {
-                    return { ...el, ...newReaction.a.filter(e => {return e.id === postId})[0] }
-                } else {
-                    return el
-                }
-            })
-          };
-        } else {
-          var newReaction = {
-            ...reaction,
-            q: {
-              ...reaction.q,
-              [reactionType]: selected ? reaction.q[reactionType] + 1 : reaction.q[reactionType] - 1  ,
-              [selectReaction(reactionType)]: selected ? [...reaction.q[selectReaction(reactionType)], userId] : reaction.q[selectReaction(reactionType)].filter(e => e != userId) ,
-            },
-          };
-
-          var newData = {
-            ...data,
-            q: { ...data.q, ...newReaction.b },
-          };
-        }
-        mutate(async (data) => {
-            const { status,  error } = await updateReaction(userId, postId, reactionType, selected);
-            if (status == "success") {
-              setReaction(newReaction);
-              return newData;
+      if (postType === 'a') {
+        var newReaction = {
+          ...reaction,
+          a: data.a.map((el) => {
+            if (el.id === postId) {
+              return {
+                id: el.id,
+                likeCount: el.likeCount,
+                clapCount: el.clapCount,
+                confusedCount: el.confusedCount,
+                likes: el.likes,
+                claps: el.claps,
+                confuseds: el.confuseds,
+                [selectReaction(reactionType)]: selected
+                  ? [...el[selectReaction(reactionType)], userId]
+                  : el[selectReaction(reactionType)].filter((e) => e != userId),
+                [reactionType]: selected ? el[reactionType] + 1 : el[reactionType] - 1,
+              };
+            } else {
+              return el;
             }
-        }, false);
+          }),
+        };
+        var newData = {
+          ...data,
+          a: data.a.map((el) => {
+            if (el.id === postId) {
+              return {
+                ...el,
+                ...newReaction.a.filter((e) => {
+                  return e.id === postId;
+                })[0],
+              };
+            } else {
+              return el;
+            }
+          }),
+        };
+      } else {
+        var newReaction = {
+          ...reaction,
+          q: {
+            ...reaction.q,
+            [reactionType]: selected ? reaction.q[reactionType] + 1 : reaction.q[reactionType] - 1,
+            [selectReaction(reactionType)]: selected
+              ? [...reaction.q[selectReaction(reactionType)], userId]
+              : reaction.q[selectReaction(reactionType)].filter((e) => e != userId),
+          },
+        };
+
+        var newData = {
+          ...data,
+          q: { ...data.q, ...newReaction.b },
+        };
+      }
+      mutate(async (data) => {
+        const { status, error } = await updateReaction(userId, postId, reactionType, selected);
+        if (status == 'success') {
+          setReaction(newReaction);
+          return newData;
+        }
+      }, false);
     } else {
-        router.push(`/auth/soru/${id}`);
+      router.push(`/auth/soru/${id}`);
     }
   };
 
   async function handleUpVote(event, postId, userId, postType, selected) {
     event.preventDefault();
-    if (userId) { 
+    if (userId) {
       // update the local data immediately
       // NOTE: key is not required when using useSWR's mutate as it's pre-bound
       //console.log(newData)
-      if (postType === "a") { 
+      if (postType === 'a') {
         var newData = {
-            ...data,
-            a: data.a.map(el => {
-                if (el.id === postId) {
-                    return { ...el, voteCount: selected ? el.voteCount + 1 : el.voteCount -1, votes: selected ? [...el.votes, userId] : el.votes.filter(e => e != userId)}
-                } else {
-                    return el
-                }
-            })
+          ...data,
+          a: data.a.map((el) => {
+            if (el.id === postId) {
+              return {
+                ...el,
+                voteCount: selected ? el.voteCount + 1 : el.voteCount - 1,
+                votes: selected ? [...el.votes, userId] : el.votes.filter((e) => e != userId),
+              };
+            } else {
+              return el;
+            }
+          }),
         };
       } else {
         var newData = {
-            ...data,
-            q: { ...data.q, voteCount: selected ? data.q.voteCount + 1 : data.q.voteCount - 1 , votes: selected ? [...data.q.votes, userId] : data.q.votes.filter(e => e != userId ) },
-          };
+          ...data,
+          q: {
+            ...data.q,
+            voteCount: selected ? data.q.voteCount + 1 : data.q.voteCount - 1,
+            votes: selected ? [...data.q.votes, userId] : data.q.votes.filter((e) => e != userId),
+          },
+        };
       }
       mutate(async (data) => {
         const { status, error } = await updateVote(userId, postId, selected);
-        if (status == "success") {
+        if (status == 'success') {
           return newData;
         }
       }, false);
@@ -227,56 +250,43 @@ const PostBody = (props) => {
     }
   }
 
-
   return (
     <Grid container alignItems="stretch">
       {!data.q ? (
-        <Typography
-          variant="h3"
-          component="h3"
-          className={classes.oops}
-          gutterBottom
-        >
+        <Typography variant="h3" component="h3" className={classes.oops} gutterBottom>
           Yüklenemedi, tekrar deneyin.
         </Typography>
       ) : (
         <>
-          <Typography
-            variant="h3"
-            component="h3"
-            className={classes.title}
-            gutterBottom
-          >
+          <Typography variant="h3" component="h3" className={classes.title} gutterBottom>
             {data.q.title.charAt(0).toUpperCase() + data.q.title.slice(1)}
           </Typography>
           <Grid container direction="column" wrap="nowrap">
             <Divider className={classes.divider} />
-            {reaction ? 
-                (<>
-                    <PostQuestion
-                      data={data}
-                      id={data.id}
-                      userId={userId}
-                      userName={userName}
-                      mutate={mutate}
-                      onMutate={onMutate}
-                      reaction={reaction.q}
-                      upvoteHandler={handleUpVote}
-                      reactionUpvoteHandler={reactionUpvoteHandler}
-                    />
-                    <PostAnswers
-                      data={data.a}
-                      parentId={data.id}
-                      userId={userId}
-                      reaction={reaction.a}
-                      reactionUpvoteHandler={reactionUpvoteHandler}
-                      upvoteHandler={handleUpVote}
-                      handleDelete={handleDelete}
-                    />
-                </>)
-                :
-                null
-            }
+            {reaction ? (
+              <>
+                <PostQuestion
+                  data={data}
+                  id={data.id}
+                  userId={userId}
+                  userName={userName}
+                  mutate={mutate}
+                  onMutate={onMutate}
+                  reaction={reaction.q}
+                  upvoteHandler={handleUpVote}
+                  reactionUpvoteHandler={reactionUpvoteHandler}
+                />
+                <PostAnswers
+                  data={data.a}
+                  parentId={data.id}
+                  userId={userId}
+                  reaction={reaction.a}
+                  reactionUpvoteHandler={reactionUpvoteHandler}
+                  upvoteHandler={handleUpVote}
+                  handleDelete={handleDelete}
+                />
+              </>
+            ) : null}
           </Grid>
         </>
       )}

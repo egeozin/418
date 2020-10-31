@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import BetterLink from "../Link";
-import Link from "next/link";
-import MUIRichTextEditor from "mui-rte";
-import CodeIcon from "@material-ui/icons/Code";
-import CodeBlock from "../Editor/EditorArea/CustomBlocks/CodeBlock";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import Blockquote from "../Editor/EditorArea/CustomBlocks/Blockquote";
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import BetterLink from '../Link';
+import Link from 'next/link';
+import MUIRichTextEditor from 'mui-rte';
+import CodeIcon from '@material-ui/icons/Code';
+import CodeBlock from '../Editor/EditorArea/CustomBlocks/CodeBlock';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
+import Blockquote from '../Editor/EditorArea/CustomBlocks/Blockquote';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-import theme from "../../src/theme";
-import languages from "../../src/languages";
-import GenericEditor from "../Editor/EditorArea/GenericEditor";
-import { useFormik } from "formik";
-import { responseEditorValidationSchema } from "../../utils/form";
-import { addZero } from "../../utils/utilFunctions";
-import EmojiBar from "./Emoji/EmojiBar";
+import theme from '../../src/theme';
+import languages from '../../src/languages';
+import GenericEditor from '../Editor/EditorArea/GenericEditor';
+import { useFormik } from 'formik';
+import { responseEditorValidationSchema } from '../../utils/form';
+import { addZero } from '../../utils/utilFunctions';
+import EmojiBar from './Emoji/EmojiBar';
 
 const updateTheme = {
   ...theme,
@@ -44,24 +44,24 @@ const updateTheme = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: "none",
+    boxShadow: 'none',
   },
   error: {
     color: theme.palette.secondary.main,
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     bottom: -20,
   },
   formField: {
-    position: "relative",
+    position: 'relative',
   },
   emojiBar: {
     marginTop: 25,
   },
   MUIRichTextEditor: {
     root: {
-      color: "red",
+      color: 'red',
     },
   },
   flexGrow: {
@@ -69,11 +69,11 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: 36,
-    fontFamily: "Hind, sans-serif",
+    fontFamily: 'Hind, sans-serif',
     fontWeight: 700,
   },
   rightTitle: {
-    lineHeight: "29px",
+    lineHeight: '29px',
   },
   divider: {
     marginTop: 20,
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
   questionContainer: {
     minHeight: 200,
-    width: "100%",
+    width: '100%',
   },
   nameLanguage: {
     marginTop: 10,
@@ -121,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
   },
   responseEditorContainer: {
     marginTop: 20,
-    position: "relative",
+    position: 'relative',
   },
   postButtonGrid: {
     marginTop: 20,
@@ -129,25 +129,24 @@ const useStyles = makeStyles((theme) => ({
   postButton: {
     //background: theme.palette.secondary.main, //'linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)',
     borderRadius: 3,
-    boxShadow: "none",
+    boxShadow: 'none',
     border: 0,
     fontSize: 20,
     fontWeight: 600,
-    color: "white",
-    padding: "2px 20px",
+    color: 'white',
+    padding: '2px 20px',
   },
   languageButton: {
-    background:
-      "linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)",
+    background: 'linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)',
     borderRadius: 3,
-    boxShadow: "none",
+    boxShadow: 'none',
     border: 0,
     fontSize: 14,
     fontWeight: 600,
-    color: "white",
+    color: 'white',
     height: 24,
     marginRight: 10,
-    padding: "0 10px",
+    padding: '0 10px',
   },
 }));
 
@@ -158,9 +157,9 @@ const PostQuestion = (props) => {
     JSON.stringify({
       blocks: [
         {
-          key: "b9rgj",
-          text: "",
-          type: "unstyled",
+          key: 'b9rgj',
+          text: '',
+          type: 'unstyled',
           depth: 0,
           inlineStyleRanges: [],
           entityRanges: [],
@@ -168,17 +167,17 @@ const PostQuestion = (props) => {
         },
       ],
       entityMap: {},
-    })
+    }),
   );
   const router = useRouter();
   const { data, id, userId, userName, mutate, onMutate } = props;
-  const included = userId ? data.q.votes.includes(userId) : false
+  const included = userId ? data.q.votes.includes(userId) : false;
   const [upvoted, setUpvoted] = useState(included);
   let renderDate = null;
 
   if (data.q.creationDate) {
     const date = new Date(data.q.creationDate.seconds * 1000);
-    const formattedDate = new Intl.DateTimeFormat("tr-TR").format(date);
+    const formattedDate = new Intl.DateTimeFormat('tr-TR').format(date);
     const hours = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
     renderDate = (
       <Grid item>
@@ -188,10 +187,10 @@ const PostQuestion = (props) => {
       </Grid>
     );
   }
- 
-  useEffect(() => { 
-    setUpvoted(included)
-  }, [included])
+
+  useEffect(() => {
+    setUpvoted(included);
+  }, [included]);
 
   const onEditorSubmit = (values, { resetForm }) => {
     const handled = handlePostResponse(values);
@@ -199,9 +198,9 @@ const PostQuestion = (props) => {
       JSON.stringify({
         blocks: [
           {
-            key: "b9rgj",
-            text: " ",
-            type: "unstyled",
+            key: 'b9rgj',
+            text: ' ',
+            type: 'unstyled',
             depth: 0,
             inlineStyleRanges: [],
             entityRanges: [],
@@ -209,9 +208,9 @@ const PostQuestion = (props) => {
           },
         ],
         entityMap: {},
-      })
+      }),
     );
-    resetForm({ bodyText: { blocks: [{ text: "" }] } });
+    resetForm({ bodyText: { blocks: [{ text: '' }] } });
     formik.setTouched({});
     formik.setErrors({});
   };
@@ -236,7 +235,7 @@ const PostQuestion = (props) => {
   const editorRef = useRef(null);
   const formik = useFormik({
     initialValues: {
-      bodyText: { blocks: [{ text: "" }] },
+      bodyText: { blocks: [{ text: '' }] },
     },
     validationSchema: responseEditorValidationSchema,
     onSubmit: onEditorSubmit,
@@ -263,7 +262,7 @@ const PostQuestion = (props) => {
           <IconButton
             onClick={(e) => {
               let newUpvoted = !upvoted;
-              props.upvoteHandler(e, id, userId, "q", newUpvoted);
+              props.upvoteHandler(e, id, userId, 'q', newUpvoted);
               setUpvoted(newUpvoted);
             }}
             edge="start"
@@ -274,9 +273,7 @@ const PostQuestion = (props) => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Typography className={classes.voteCount}>
-            {data.q.voteCount}
-          </Typography>
+          <Typography className={classes.voteCount}>{data.q.voteCount}</Typography>
         </Grid>
       </Grid>
       <Grid item xs={12} md={9}>
@@ -289,15 +286,15 @@ const PostQuestion = (props) => {
                   toolbar={false}
                   customControls={[
                     {
-                      name: "codeBlock",
+                      name: 'codeBlock',
                       icon: <CodeIcon />,
-                      type: "block",
+                      type: 'block',
                       blockWrapper: <CodeBlock />,
                     },
                     {
-                      name: "Blockquote",
+                      name: 'Blockquote',
                       icon: <FormatQuoteIcon />,
-                      type: "block",
+                      type: 'block',
                       blockWrapper: <Blockquote />,
                     },
                   ]}
@@ -305,11 +302,7 @@ const PostQuestion = (props) => {
                 />
               </MuiThemeProvider>
             ) : (
-              <Typography
-                variant="body1"
-                component="body"
-                className={classes.questionText}
-              >
+              <Typography variant="body1" component="body" className={classes.questionText}>
                 {data.q.body.charAt(0).toUpperCase() + data.q.body.slice(1)}
               </Typography>
             )}
@@ -317,13 +310,8 @@ const PostQuestion = (props) => {
           <Grid item className={classes.nameLanguage}>
             <Grid container direction="row" alignItems="center" spacing={2}>
               <Grid item>
-                <BetterLink
-                  href="/user/[id]/"
-                  as={`/user/${data.q.ownerUserId}`}
-                >
-                  <Typography className={classes.questionPoster}>
-                    @{data.q.ownerName}
-                  </Typography>
+                <BetterLink href="/user/[id]/" as={`/user/${data.q.ownerUserId}`}>
+                  <Typography className={classes.questionPoster}>@{data.q.ownerName}</Typography>
                 </BetterLink>
               </Grid>
               <Grid item>
@@ -335,8 +323,7 @@ const PostQuestion = (props) => {
                       size="small"
                       className={classes.languageButton}
                       style={{
-                        background: languages.filter((l) => l.name == lang)[0]
-                          .color,
+                        background: languages.filter((l) => l.name == lang)[0].color,
                       }}
                     >
                       {lang}
@@ -350,7 +337,7 @@ const PostQuestion = (props) => {
             <Grid item className={classes.responseEditorContainer}>
               <GenericEditor
                 forwardRef={editorRef}
-                label={"Buraya cevabınızı yazın..."}
+                label={'Buraya cevabınızı yazın...'}
                 handleChange={formik.setFieldValue}
                 handleBlur={formik.setFieldTouched}
                 userId={userId}
@@ -359,9 +346,7 @@ const PostQuestion = (props) => {
               />
               {formik.errors.bodyText && formik.touched.bodyText ? (
                 formik.errors.bodyText.blocks[0] ? (
-                  <div className={classes.error}>
-                    {formik.errors.bodyText.blocks[0].text}
-                  </div>
+                  <div className={classes.error}>{formik.errors.bodyText.blocks[0].text}</div>
                 ) : null
               ) : null}
             </Grid>
@@ -369,7 +354,7 @@ const PostQuestion = (props) => {
               <EmojiBar
                 postId={id}
                 userId={userId}
-                postType={"q"}
+                postType={'q'}
                 reaction={props.reaction}
                 reactionUpvoteHandler={props.reactionUpvoteHandler}
               />

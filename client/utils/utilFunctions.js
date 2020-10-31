@@ -1,14 +1,13 @@
 exports.containsUrl = (text) => {
   return new RegExp(
-    "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+    '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?',
   ).test(text);
 };
 
 exports.firestoreAutoId = () => {
-  const CHARS =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  let autoId = "";
+  let autoId = '';
 
   for (let i = 0; i < 20; i++) {
     autoId += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
@@ -17,5 +16,5 @@ exports.firestoreAutoId = () => {
 };
 
 exports.addZero = (i) => {
-  return i < 10 ? "0" + i : i;
+  return i < 10 ? '0' + i : i;
 };

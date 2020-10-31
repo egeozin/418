@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Container, Grid, makeStyles } from "@material-ui/core";
-import { Layout } from "../../components";
+import React, { useState, useEffect } from 'react';
+import { Container, Grid, makeStyles } from '@material-ui/core';
+import { Layout } from '../../components';
 
 //import fetch from 'isomorphic-unfetch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: "none",
+    boxShadow: 'none',
   },
   flexGrow: {
     flexGrow: 1,
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: 1,
   },
   rightTitle: {
-    lineHeight: "29px",
+    lineHeight: '29px',
   },
   divider: {
     marginBottom: 20,
@@ -32,11 +32,11 @@ const useStyles = makeStyles((theme) => ({
 
 const PostLayout = (props) => {
   const classes = useStyles();
-  const {children, auth, logOut, authPage } = props;
+  const { children, auth, logOut, authPage } = props;
   const [loading, setLoading] = useState(false);
 
   return (
-    <Layout auth={auth} logOut={logOut} authPage={authPage} >
+    <Layout auth={auth} logOut={logOut} authPage={authPage}>
       <Container maxWidth="md" className={classes.postContainer}>
         <Grid container className={classes.postGridContainer}>
           {children}

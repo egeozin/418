@@ -1,18 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
 const useStyles = (color) => {
-    return makeStyles(theme => (
-      theme.palette.primary.main = color
-    ))
-  }
+  return makeStyles((theme) => (theme.palette.primary.main = color));
+};
 
-const ButtonWrap = props => {
-  const classes = {}
+const ButtonWrap = (props) => {
+  const classes = {};
   return (
     <Button
       disabled={props.disabled}
@@ -28,7 +26,6 @@ const ButtonWrap = props => {
   );
 };
 
-ButtonWrap.propTypes = {
-};
+ButtonWrap.propTypes = {};
 
 export default ButtonWrap;

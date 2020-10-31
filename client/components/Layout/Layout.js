@@ -1,5 +1,5 @@
-import React from "react";
-import { Bar, Footer } from "../../components";
+import React from 'react';
+import { Bar, Footer } from '../../components';
 
 const Layout = ({ children, auth, authPage, logOut }) => {
   return (

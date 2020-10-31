@@ -1,35 +1,35 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Link from "next/link";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import { orange } from "@material-ui/core/colors";
-import Avatar from "@material-ui/core/Avatar";
-import { Button } from "@material-ui/core";
-import { useFormik } from "formik";
-import { userValidationSchema } from "../../utils/form";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Link from 'next/link';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import { orange } from '@material-ui/core/colors';
+import Avatar from '@material-ui/core/Avatar';
+import { Button } from '@material-ui/core';
+import { useFormik } from 'formik';
+import { userValidationSchema } from '../../utils/form';
 
-import InfoField from "./InfoField";
+import InfoField from './InfoField';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: '100%',
     marginBottom: 25,
     marginTop: 25,
   },
   media: {
     maxWidth: 400,
     height: 0,
-    paddingTop: "56.25%", // 16:9
-    display: "block",
-    width: "50%",
-    marginLeft: "auto",
-    marginRight: "auto",
+    paddingTop: '56.25%', // 16:9
+    display: 'block',
+    width: '50%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
   },
@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme) => ({
     height: 70,
   },
   avatarContainer: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
     marginTop: 20,
     marginBottom: 40,
   },
 
   inputContainer: {
-    margin: "auto",
+    margin: 'auto',
   },
   buttonContainer: {
-    display: "flex",
-    justifyContent: "space-around",
+    display: 'flex',
+    justifyContent: 'space-around',
   },
   button: {
     marginTop: 20,
@@ -58,13 +58,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   formContainer: {
-    width: "100%",
+    width: '100%',
   },
 }));
 
 const updateUser = (userid, username, fullName) =>
-  fetch("/api/user/update", {
-    method: "POST",
+  fetch('/api/user/update', {
+    method: 'POST',
     body: JSON.stringify({
       userId: userid,
       username: username,
@@ -83,11 +83,7 @@ const UserBody = (props) => {
 
   const onUserDetailSubmit = async (values) => {
     setEditMode(!editMode);
-    const { updated, error } = await updateUser(
-      data.id,
-      values.username,
-      values.fullName
-    );
+    const { updated, error } = await updateUser(data.id, values.username, values.fullName);
   };
 
   const cancelHandler = () => {
@@ -107,25 +103,14 @@ const UserBody = (props) => {
   });
 
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      item
-      xs={12}
-    >
+    <Grid container direction="column" justifyContent="center" alignItems="center" item xs={12}>
       <Grid container direction="row" item xs={12}>
         <Grid className={classes.avatarContainer} item xs={12}>
           {data.photoImageURL ? (
-            <Avatar
-              aria-label="recipe"
-              src={data.photoImageURL}
-              className={classes.avatar}
-            />
+            <Avatar aria-label="recipe" src={data.photoImageURL} className={classes.avatar} />
           ) : (
             <Avatar aria-label="recipe" className={classes.avatar}>
-              {data.name ? data.name.charAt(0).toUpperCase() : "U"}
+              {data.name ? data.name.charAt(0).toUpperCase() : 'U'}
             </Avatar>
           )}
         </Grid>
@@ -139,10 +124,7 @@ const UserBody = (props) => {
       >
         {user && (
           <>
-            <form
-              onSubmit={formik.handleSubmit}
-              className={classes.formContainer}
-            >
+            <form onSubmit={formik.handleSubmit} className={classes.formContainer}>
               <InfoField
                 id="username"
                 name="username"
@@ -163,11 +145,7 @@ const UserBody = (props) => {
                 formik={formik}
               />
             </form>
-            <InfoField
-              label="Email"
-              value={data.email}
-              handleChange={handleChange}
-            />
+            <InfoField label="Email" value={data.email} handleChange={handleChange} />
           </>
         )}
       </Grid>

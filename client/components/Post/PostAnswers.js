@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
+import React, { useState, useEffect } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 
-import { makeStyles } from "@material-ui/core/styles";
-import PostAnswer from "./PostAnswer";
-import containsUrl from "../../utils/utilFunctions";
+import { makeStyles } from '@material-ui/core/styles';
+import PostAnswer from './PostAnswer';
+import containsUrl from '../../utils/utilFunctions';
 
 //import fetch from 'isomorphic-unfetch';
 
@@ -19,12 +19,7 @@ const PostAnswers = (props) => {
   const classes = useStyles();
   const { data } = props;
   return (
-    <Grid
-      container
-      direction="row"
-      spacing={1}
-      className={classes.answersContainer}
-    >
+    <Grid container direction="row" spacing={1} className={classes.answersContainer}>
       <Grid item xs={3} md={1}></Grid>
       <Grid item container xs={12} md={9}>
         <Grid
@@ -42,7 +37,15 @@ const PostAnswers = (props) => {
                   id={e.id}
                   parentId={props.parentId}
                   userId={props.userId}
-                  reaction={{id: e.id, likeCount: e.likeCount, confusedCount: e.confusedCount, clapCount: e.clapCount, likes: e.likes, claps: e.claps, confuseds: e.confuseds }}
+                  reaction={{
+                    id: e.id,
+                    likeCount: e.likeCount,
+                    confusedCount: e.confusedCount,
+                    clapCount: e.clapCount,
+                    likes: e.likes,
+                    claps: e.claps,
+                    confuseds: e.confuseds,
+                  }}
                   upvoteHandler={props.upvoteHandler}
                   reactionUpvoteHandler={props.reactionUpvoteHandler}
                   handleDelete={props.handleDelete}

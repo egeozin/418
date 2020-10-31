@@ -1,14 +1,7 @@
-import React from "react";
-import {
-  makeStyles,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-ui/core";
-import Link from "../Link";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import React from 'react';
+import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core';
+import Link from '../Link';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     backgroundColor: theme.palette.background.paper,
-    textDecoration: "none",
+    textDecoration: 'none',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -25,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   title: {
-    fontFamily: "Hind",
+    fontFamily: 'Hind',
     fontWeight: 700,
     fontSize: 24,
     color: theme.palette.secondary.main,
@@ -38,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   iconButton: {
-    fontSize: "0rem",
+    fontSize: '0rem',
   },
 }));
 
@@ -53,7 +46,7 @@ const Bar = (props) => {
     return auth.substring(1, auth.indexOf('"%2C"'));
   };
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     cookie = decodeURI(document.cookie);
     userId = parseIdFromCookie(cookie);
   }
@@ -62,13 +55,9 @@ const Bar = (props) => {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar} elevation={0}>
         <Toolbar>
-          <Link
-            href="/"
-            style={{ textDecoration: "none" }}
-            className={classes.titleLink}
-          >
+          <Link href="/" style={{ textDecoration: 'none' }} className={classes.titleLink}>
             <Typography variant="h2" component="h2" className={classes.title}>
-              {"{ Kod Koda }"}
+              {'{ Kod Koda }'}
             </Typography>
           </Link>
           {!props.authPage ? (
@@ -86,8 +75,8 @@ const Bar = (props) => {
 
                 <Button color="inherit" onClick={() => props.logOut()}>
                   <Typography variant="h4" className={classes.login}>
-                    {" "}
-                    Çıkış Yap{" "}
+                    {' '}
+                    Çıkış Yap{' '}
                   </Typography>
                 </Button>
               </>
@@ -95,14 +84,14 @@ const Bar = (props) => {
               <>
                 <Link href="/auth/standard" className={classes.menuButton}>
                   <Typography variant="h4" className={classes.login}>
-                    {" "}
-                    Giriş Yap{" "}
+                    {' '}
+                    Giriş Yap{' '}
                   </Typography>
                 </Link>
                 <Link href="/auth/signup" className={classes.menuButton}>
                   <Typography variant="h4" className={classes.login}>
-                    {" "}
-                    Üye Ol{" "}
+                    {' '}
+                    Üye Ol{' '}
                   </Typography>
                 </Link>
               </>
