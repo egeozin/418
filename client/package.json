@@ -22,7 +22,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/styles": "^4.5.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "clsx": "^1.0.4",
     "cross-env": "^5.2.0",
     "dotenv": "^8.2.0",
