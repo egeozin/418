@@ -49,7 +49,7 @@
     "react-router-dom": "^5.0.1",
     "react-social-icons": "^4.1.0",
     "swr": "0.2.2",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "yup": "^0.29.3"
   },
   "devDependencies": {
